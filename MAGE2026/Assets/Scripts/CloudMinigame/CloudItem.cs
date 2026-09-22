@@ -5,11 +5,11 @@ public class CloudItem : MonoBehaviour
     [Header("Cloud")]
     public CloudType cloudType;
 
-    [Header("Minigame Camera")]
-    public Camera minigameCamera;
-
     [HideInInspector]
     public CloudLine cloudLine;
+
+    [HideInInspector]
+    public Camera minigameCamera;
 
     [HideInInspector]
     public float conveyorDistance;
@@ -17,16 +17,14 @@ public class CloudItem : MonoBehaviour
     public bool IsDragging { get; private set; }
 
     private Vector3 dragOffset;
+
     private float distanceWhenPickedUp;
     private float dragStartTime;
     private float dragZ;
 
     void OnMouseDown()
     {
-        if (cloudLine == null)
-            return;
-
-        if (minigameCamera == null)
+        if (cloudLine == null || minigameCamera == null)
             return;
 
         IsDragging = true;
@@ -48,7 +46,8 @@ public class CloudItem : MonoBehaviour
 
         Vector3 mouseWorldPosition = GetMouseWorldPosition();
 
-        Vector3 newPosition = mouseWorldPosition + dragOffset;
+        Vector3 newPosition =
+            mouseWorldPosition + dragOffset;
 
         newPosition.z = dragZ;
 
@@ -70,7 +69,8 @@ public class CloudItem : MonoBehaviour
         }
         else
         {
-            float dragTime = Time.time - dragStartTime;
+            float dragTime =
+                Time.time - dragStartTime;
 
             cloudLine.ReturnItemToLine(
                 this,
@@ -85,12 +85,17 @@ public class CloudItem : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
 
         float distanceFromCamera =
-            Mathf.Abs(minigameCamera.transform.position.z - dragZ);
+            Mathf.Abs(
+                minigameCamera.transform.position.z -
+                dragZ
+            );
 
         mousePosition.z = distanceFromCamera;
 
         Vector3 worldPosition =
-            minigameCamera.ScreenToWorldPoint(mousePosition);
+            minigameCamera.ScreenToWorldPoint(
+                mousePosition
+            );
 
         worldPosition.z = dragZ;
 
@@ -99,10 +104,13 @@ public class CloudItem : MonoBehaviour
 
     CloudFolder FindFolderUnderMouse()
     {
-        Vector3 mouseWorldPosition = GetMouseWorldPosition();
+        Vector3 mouseWorldPosition =
+            GetMouseWorldPosition();
 
         Collider2D hit =
-            Physics2D.OverlapPoint(mouseWorldPosition);
+            Physics2D.OverlapPoint(
+                mouseWorldPosition
+            );
 
         if (hit == null)
             return null;
