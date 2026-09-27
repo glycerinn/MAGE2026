@@ -123,6 +123,7 @@ public class CloudLine : MonoBehaviour
     public void ItemSorted(CloudItem item)
     {
         items.Remove(item);
+        item.gameObject.SetActive(false);
         Destroy(item.gameObject);
     }
 

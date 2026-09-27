@@ -17,21 +17,16 @@ public class CloudItem : MonoBehaviour
     public bool IsDragging { get; private set; }
 
     private Vector3 dragOffset;
-
     private float distanceWhenPickedUp;
     private float dragStartTime;
     private float dragZ;
 
     void OnMouseDown()
     {
-        if (cloudLine == null || minigameCamera == null)
-            return;
-
         IsDragging = true;
 
         distanceWhenPickedUp = conveyorDistance;
         dragStartTime = Time.time;
-
         dragZ = transform.position.z;
 
         Vector3 mouseWorldPosition = GetMouseWorldPosition();
@@ -46,9 +41,7 @@ public class CloudItem : MonoBehaviour
 
         Vector3 mouseWorldPosition = GetMouseWorldPosition();
 
-        Vector3 newPosition =
-            mouseWorldPosition + dragOffset;
-
+        Vector3 newPosition = mouseWorldPosition + dragOffset;
         newPosition.z = dragZ;
 
         transform.position = newPosition;
@@ -61,23 +54,49 @@ public class CloudItem : MonoBehaviour
 
         IsDragging = false;
 
-        CloudFolder folder = FindFolderUnderMouse();
+        Vector3 mouseWorldPosition = GetMouseWorldPosition();
+        Collider2D[] hits = Physics2D.OverlapPointAll(mouseWorldPosition);
 
-        if (folder != null && folder.Accepts(cloudType))
+        CloudFolder folder = null;
+
+        foreach (Collider2D hit in hits)
         {
-            cloudLine.ItemSorted(this);
+            CloudFolder possibleFolder = hit.GetComponentInParent<CloudFolder>();
+
+            if (possibleFolder != null)
+            {
+                folder = possibleFolder;
+                break;
+            }
+        }
+
+        if (folder != null)
+        {
+            bool accepted = folder.Accepts(cloudType);
+
+            if (accepted)
+            {
+                cloudLine.ItemSorted(this);
+            }
+            else
+            {
+                ReturnToLine();
+            }
         }
         else
         {
-            float dragTime =
-                Time.time - dragStartTime;
-
-            cloudLine.ReturnItemToLine(
-                this,
-                distanceWhenPickedUp,
-                dragTime
-            );
+            ReturnToLine();
         }
+    }
+
+    void ReturnToLine()
+    {
+        float dragTime = Time.time - dragStartTime;
+        cloudLine.ReturnItemToLine(
+            this,
+            distanceWhenPickedUp,
+            dragTime
+        );
     }
 
     Vector3 GetMouseWorldPosition()
@@ -93,28 +112,10 @@ public class CloudItem : MonoBehaviour
         mousePosition.z = distanceFromCamera;
 
         Vector3 worldPosition =
-            minigameCamera.ScreenToWorldPoint(
-                mousePosition
-            );
+            minigameCamera.ScreenToWorldPoint(mousePosition);
 
         worldPosition.z = dragZ;
 
         return worldPosition;
-    }
-
-    CloudFolder FindFolderUnderMouse()
-    {
-        Vector3 mouseWorldPosition =
-            GetMouseWorldPosition();
-
-        Collider2D hit =
-            Physics2D.OverlapPoint(
-                mouseWorldPosition
-            );
-
-        if (hit == null)
-            return null;
-
-        return hit.GetComponent<CloudFolder>();
     }
 }

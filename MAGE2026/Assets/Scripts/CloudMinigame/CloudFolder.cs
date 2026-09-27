@@ -6,6 +6,7 @@ public class CloudFolder : MonoBehaviour
 
     public bool Accepts(CloudType currentType)
     {
-        return currentType == cloudType;
+        bool accepted = currentType == cloudType;
+        return accepted;
     }
 }
