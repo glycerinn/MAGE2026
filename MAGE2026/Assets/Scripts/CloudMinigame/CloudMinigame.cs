@@ -4,7 +4,8 @@ public class CloudMinigame : MonoBehaviour, IMinigame
 {
     [Header("Cloud Line")]
     public CloudLine cloudLine;
-    public string MinigameName => "Cloud";
+
+    public string MinigameName => "CloudMinigame";
 
     private int sortedClouds;
     private bool hasWon;
@@ -28,7 +29,15 @@ public class CloudMinigame : MonoBehaviour, IMinigame
 
             Debug.Log("CLOUD MINIGAME WON!");
 
-            StageManager.Instance.MinigameWon("Cloud");
+            StageManager.Instance.MinigameWon(MinigameName);
         }
+    }
+
+    public void ResetMinigame()
+    {
+        sortedClouds = 0;
+        hasWon = false;
+
+        cloudLine.ResetLine();
     }
 }

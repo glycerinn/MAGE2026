@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class SatelliteMinigame : MonoBehaviour
+public class SatelliteMinigame : MonoBehaviour, IMinigame
 {
+    public string MinigameName => "SatelliteMinigame";
+
     [Header("Line")]
     public Transform linePivot;
     public Transform line;
@@ -33,14 +35,7 @@ public class SatelliteMinigame : MonoBehaviour
 
     void Start()
     {
-        completedRounds = 0;
-        hasWon = false;
-
-        lineAngle = 0f;
-        linePivot.localRotation = Quaternion.identity;
-        targetPivot.localRotation = Quaternion.identity;
-
-        GenerateNewTarget();
+        ResetMinigame();
     }
 
     void Update()
@@ -100,7 +95,7 @@ public class SatelliteMinigame : MonoBehaviour
 
                 Debug.Log("SATELLITE MINIGAME WON!");
 
-                StageManager.Instance.MinigameWon("Satellite");
+                StageManager.Instance.MinigameWon(MinigameName);
                 return;
             }
 
@@ -120,5 +115,17 @@ public class SatelliteMinigame : MonoBehaviour
             0f,
             targetAngle
         );
+    }
+
+    public void ResetMinigame()
+    {
+        completedRounds = 0;
+        hasWon = false;
+        lineAngle = 0f;
+
+        linePivot.localRotation = Quaternion.identity;
+        targetPivot.localRotation = Quaternion.identity;
+
+        GenerateNewTarget();
     }
 }

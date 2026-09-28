@@ -1,18 +1,17 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
 
-    [Header("Stage Minigames")]
-    public GameObject[] stageMinigames;
+    [Header("Minigames")]
+    public GameObject[] minigames;
 
     [Header("Stage Complete UI")]
     public GameObject stageCompleteScreen;
 
-    private HashSet<string> completedMinigames = new HashSet<string>();
     private int currentStage;
+    private int currentMinigame;
     private bool stageComplete;
 
     public int CurrentStage => currentStage + 1;
@@ -26,61 +25,89 @@ public class StageManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
         currentStage = 0;
+        currentMinigame = 0;
         stageComplete = false;
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
 
-        ActivateCurrentStage();
+        StartStage();
     }
 
-    void ActivateCurrentStage()
+    void StartStage()
     {
-        for (int i = 0; i < stageMinigames.Length; i++)
-        {
-            if (stageMinigames[i] != null)
-                stageMinigames[i].SetActive(i <= currentStage);
-        }
+        currentMinigame = 0;
+
+        DisableAllMinigames();
 
         Debug.Log("Starting Stage " + CurrentStage);
+
+        ActivateCurrentMinigame();
+    }
+
+    void ActivateCurrentMinigame()
+    {
+        if (currentMinigame > currentStage)
+        {
+            CompleteStage();
+            return;
+        }
+
+        GameObject minigame = minigames[currentMinigame];
+
+        if (minigame != null)
+            minigame.SetActive(true);
+
+        Debug.Log(
+            "Starting minigame: " +
+            minigame.name
+        );
     }
 
     public void MinigameWon(string minigameName)
     {
-        if (completedMinigames.Contains(minigameName))
-            return;
-
-        completedMinigames.Add(minigameName);
-
-        Debug.Log("Minigame won: " + minigameName);
-
-        CheckStageComplete();
-    }
-
-    void CheckStageComplete()
-    {
-        for (int i = 0; i <= currentStage; i++)
-        {
-            string requiredMinigame = stageMinigames[i].GetComponent<IMinigame>().MinigameName;
-
-            if (!completedMinigames.Contains(requiredMinigame))
-                return;
-        }
-
-        CompleteCurrentStage();
-    }
-
-    void CompleteCurrentStage()
-    {
         if (stageComplete)
             return;
 
+        GameObject currentObject = minigames[currentMinigame];
+
+        if (currentObject == null)
+            return;
+
+        if (currentObject.name != minigameName)
+        {
+            Debug.LogWarning(
+                "Wrong minigame completed. Expected: " +
+                currentObject.name +
+                " | Received: " +
+                minigameName
+            );
+
+            return;
+        }
+
+        Debug.Log("Minigame complete: " + minigameName);
+
+        currentObject.SetActive(false);
+
+        currentMinigame++;
+
+        if (currentMinigame > currentStage)
+        {
+            CompleteStage();
+            return;
+        }
+
+        ActivateCurrentMinigame();
+    }
+
+    void CompleteStage()
+    {
         stageComplete = true;
 
         Debug.Log("STAGE " + CurrentStage + " COMPLETE!");
@@ -94,7 +121,7 @@ public class StageManager : MonoBehaviour
         if (!stageComplete)
             return;
 
-        if (currentStage >= stageMinigames.Length - 1)
+        if (currentStage >= minigames.Length - 1)
         {
             Debug.Log("ALL STAGES COMPLETE!");
             return;
@@ -106,7 +133,32 @@ public class StageManager : MonoBehaviour
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
 
-        ActivateCurrentStage();
+        ResetMinigames();
+
+        StartStage();
+    }
+
+    void ResetMinigames()
+    {
+        for (int i = 0; i < minigames.Length; i++)
+        {
+            if (minigames[i] == null)
+                continue;
+
+            minigames[i].SetActive(false);
+
+            if (minigames[i].TryGetComponent(out IMinigame minigame))
+                minigame.ResetMinigame();
+        }
+    }
+
+    void DisableAllMinigames()
+    {
+        for (int i = 0; i < minigames.Length; i++)
+        {
+            if (minigames[i] != null)
+                minigames[i].SetActive(false);
+        }
     }
 
     public void Quit()

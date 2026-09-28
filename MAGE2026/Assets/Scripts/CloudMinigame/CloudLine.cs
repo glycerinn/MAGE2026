@@ -141,6 +141,21 @@ public class CloudLine : MonoBehaviour
         }
     }
 
+    public void ResetLine()
+    {
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            if (items[i] != null)
+            {
+                Destroy(items[i].gameObject);
+            }
+        }
+
+        items.Clear();
+
+        SpawnClouds();
+    }
+
     void ShuffleList(List<CloudItem> list)
     {
         for (int i = list.Count - 1; i > 0; i--)

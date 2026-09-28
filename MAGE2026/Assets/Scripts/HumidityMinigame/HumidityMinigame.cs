@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class HumidityMinigame : MonoBehaviour, IMinigame
 {
-    public string MinigameName => "Humidity";
-    
+    public string MinigameName => "HumidityMinigame";
+
     [Header("Sliders")]
     public HumiditySlider[] sliders;
 
@@ -18,8 +18,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
 
     void Start()
     {
-        completedRounds = 0;
-        GenerateNewRound();
+        ResetMinigame();
     }
 
     public void SliderButtonPressed(HumiditySlider slider)
@@ -111,10 +110,17 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
         {
             Debug.Log("HUMIDITY MINIGAME WON!");
 
-            StageManager.Instance.MinigameWon("Humidity");
+            StageManager.Instance.MinigameWon(MinigameName);
             return;
         }
 
+        GenerateNewRound();
+    }
+
+    public void ResetMinigame()
+    {
+        completedRounds = 0;
+        majorityValue = 0;
         GenerateNewRound();
     }
 }

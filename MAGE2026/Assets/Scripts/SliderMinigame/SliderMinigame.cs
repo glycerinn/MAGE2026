@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class SliderMinigame : MonoBehaviour
+public class SliderMinigame : MonoBehaviour, IMinigame
 {
+    public string MinigameName => "SliderMinigame";
+
     [Header("Sliders")]
     public ObjectSlider[] sliders;
 
@@ -13,10 +15,7 @@ public class SliderMinigame : MonoBehaviour
 
     void Start()
     {
-        completedRounds = 0;
-        hasWon = false;
-
-        GenerateNewRound();
+        ResetMinigame();
     }
 
     public void SelectSlider(ObjectSlider selectedSlider)
@@ -50,7 +49,7 @@ public class SliderMinigame : MonoBehaviour
 
                 Debug.Log("SLIDER MINIGAME WON!");
 
-                StageManager.Instance.MinigameWon("Slider");
+                StageManager.Instance.MinigameWon(MinigameName);
                 return;
             }
 
@@ -68,5 +67,13 @@ public class SliderMinigame : MonoBehaviour
         {
             sliders[i].SetValue(Random.Range(0, 101));
         }
+    }
+
+    public void ResetMinigame()
+    {
+        completedRounds = 0;
+        hasWon = false;
+
+        GenerateNewRound();
     }
 }

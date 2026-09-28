@@ -9880,7 +9880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3759ada98fba0e49a8e5d350c83e041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageManager
-  stageMinigames:
+  minigames:
   - {fileID: 1789082857}
   - {fileID: 717209398}
   - {fileID: 228379242}
