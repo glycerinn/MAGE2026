@@ -23,11 +23,19 @@ public class SatelliteMinigame : MonoBehaviour
     public KeyCode rotateRight = KeyCode.D;
     public KeyCode checkAlignment = KeyCode.Space;
 
+    [Header("Win Condition")]
+    public int winAmount = 3;
+
     private float lineAngle;
     private float targetAngle;
+    private int completedRounds;
+    private bool hasWon;
 
     void Start()
     {
+        completedRounds = 0;
+        hasWon = false;
+
         lineAngle = 0f;
         linePivot.localRotation = Quaternion.identity;
         targetPivot.localRotation = Quaternion.identity;
@@ -37,6 +45,9 @@ public class SatelliteMinigame : MonoBehaviour
 
     void Update()
     {
+        if (hasWon)
+            return;
+
         RotateLine();
 
         if (Input.GetKeyDown(checkAlignment))
@@ -76,6 +87,23 @@ public class SatelliteMinigame : MonoBehaviour
 
         if (difference <= acceptableAngle)
         {
+            completedRounds++;
+
+            Debug.Log(
+                "Satellite round complete! " +
+                completedRounds + "/" + winAmount
+            );
+
+            if (completedRounds >= winAmount)
+            {
+                hasWon = true;
+
+                Debug.Log("SATELLITE MINIGAME WON!");
+
+                StageManager.Instance.MinigameWon("Satellite");
+                return;
+            }
+
             GenerateNewTarget();
         }
     }

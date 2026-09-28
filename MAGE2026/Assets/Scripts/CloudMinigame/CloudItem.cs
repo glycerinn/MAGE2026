@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum CloudType
+{
+    Cumulus,
+    Nimbostratus,
+    Stratus
+}
+
 public class CloudItem : MonoBehaviour
 {
     [Header("Cloud")]

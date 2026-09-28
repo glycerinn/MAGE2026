@@ -25,9 +25,15 @@ public class CloudLine : MonoBehaviour
     private List<CloudItem> items = new List<CloudItem>();
     private float lineLength;
 
+    private CloudMinigame minigame;
+    private int totalClouds;
+
+    public int TotalClouds => totalClouds;
+
     void Start()
     {
         lineLength = endX - startX;
+        minigame = GetComponentInParent<CloudMinigame>();
         SpawnClouds();
     }
 
@@ -59,6 +65,8 @@ public class CloudLine : MonoBehaviour
         {
             ShuffleList(spawnList);
         }
+
+        totalClouds = spawnList.Count;
 
         for (int i = 0; i < spawnList.Count; i++)
         {
@@ -123,8 +131,14 @@ public class CloudLine : MonoBehaviour
     public void ItemSorted(CloudItem item)
     {
         items.Remove(item);
+
         item.gameObject.SetActive(false);
         Destroy(item.gameObject);
+
+        if (minigame != null)
+        {
+            minigame.CloudSorted();
+        }
     }
 
     void ShuffleList(List<CloudItem> list)

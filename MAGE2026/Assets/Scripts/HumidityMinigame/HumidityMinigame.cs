@@ -1,17 +1,24 @@
 using UnityEngine;
 
-public class HumidityMinigame : MonoBehaviour
+public class HumidityMinigame : MonoBehaviour, IMinigame
 {
+    public string MinigameName => "Humidity";
+    
     [Header("Sliders")]
     public HumiditySlider[] sliders;
 
     [Header("Allowed Values")]
     public int[] allowedValues = { 35, 50, 80 };
 
+    [Header("Win Condition")]
+    public int winAmount = 3;
+
     private int majorityValue;
+    private int completedRounds;
 
     void Start()
     {
+        completedRounds = 0;
         GenerateNewRound();
     }
 
@@ -93,7 +100,20 @@ public class HumidityMinigame : MonoBehaviour
                 return;
         }
 
-        Debug.Log("All sliders matched!");
+        completedRounds++;
+
+        Debug.Log(
+            "Humidity round complete! " +
+            completedRounds + "/" + winAmount
+        );
+
+        if (completedRounds >= winAmount)
+        {
+            Debug.Log("HUMIDITY MINIGAME WON!");
+
+            StageManager.Instance.MinigameWon("Humidity");
+            return;
+        }
 
         GenerateNewRound();
     }

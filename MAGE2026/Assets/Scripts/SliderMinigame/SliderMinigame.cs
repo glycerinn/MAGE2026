@@ -5,13 +5,25 @@ public class SliderMinigame : MonoBehaviour
     [Header("Sliders")]
     public ObjectSlider[] sliders;
 
+    [Header("Win Condition")]
+    public int winAmount = 3;
+
+    private int completedRounds;
+    private bool hasWon;
+
     void Start()
     {
+        completedRounds = 0;
+        hasWon = false;
+
         GenerateNewRound();
     }
 
     public void SelectSlider(ObjectSlider selectedSlider)
     {
+        if (hasWon)
+            return;
+
         int[] values = new int[sliders.Length];
 
         for (int i = 0; i < sliders.Length; i++)
@@ -25,7 +37,23 @@ public class SliderMinigame : MonoBehaviour
 
         if (selectedSlider.Value == medianValue)
         {
-            Debug.Log("Correct!");
+            completedRounds++;
+
+            Debug.Log(
+                "Slider round complete! " +
+                completedRounds + "/" + winAmount
+            );
+
+            if (completedRounds >= winAmount)
+            {
+                hasWon = true;
+
+                Debug.Log("SLIDER MINIGAME WON!");
+
+                StageManager.Instance.MinigameWon("Slider");
+                return;
+            }
+
             GenerateNewRound();
         }
         else
