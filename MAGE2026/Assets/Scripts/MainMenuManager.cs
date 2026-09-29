@@ -8,9 +8,11 @@ public class MainMenuManager : MonoBehaviour
     // public LevelLoader levelLoader;
     // private AudioManager audioManager;
     private int sceneToContinue;
+    public GameObject StageMenu;
 
     public void Awake()
     {
+        StageMenu.SetActive(false);
         // GameObject audioObj = GameObject.FindGameObjectWithTag("AudioManager");
 
         // if (audioObj != null)
@@ -35,7 +37,12 @@ public class MainMenuManager : MonoBehaviour
     {
         // StartCoroutine(levelLoader.PlayTutorialTransition());
         // audioManager.playButtonSFX();
-        SceneManager.LoadScene("SampleScene");
+        StageMenu.SetActive(true);
+    }
+
+    public void Back()
+    {
+        StageMenu.SetActive(false);
     }
 
 

@@ -9866,7 +9866,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &2009242654
 MonoBehaviour:
@@ -9885,6 +9885,12 @@ MonoBehaviour:
   - {fileID: 717209398}
   - {fileID: 228379242}
   - {fileID: 1725451517}
+  mainCamera: {fileID: 330585545}
+  minigameCameras:
+  - {fileID: 1212896909}
+  - {fileID: 1543874164}
+  - {fileID: 801700571}
+  - {fileID: 558401078}
   stageCompleteScreen: {fileID: 888625253}
 --- !u!4 &2009242655
 Transform:

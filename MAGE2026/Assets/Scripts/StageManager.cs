@@ -7,6 +7,10 @@ public class StageManager : MonoBehaviour
     [Header("Minigames")]
     public GameObject[] minigames;
 
+    [Header("Cameras")]
+    public Camera mainCamera;
+    public Camera[] minigameCameras;
+
     [Header("Stage Complete UI")]
     public GameObject stageCompleteScreen;
 
@@ -29,7 +33,9 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        currentStage = 0;
+        currentStage = PlayerPrefs.GetInt("SelectedStage", 1) - 1;
+        currentStage = Mathf.Clamp(currentStage, 0, minigames.Length - 1);
+
         currentMinigame = 0;
         stageComplete = false;
 
@@ -37,6 +43,18 @@ public class StageManager : MonoBehaviour
             stageCompleteScreen.SetActive(false);
 
         StartStage();
+    }
+
+    void SwitchToMainCamera()
+    {
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(true);
+
+        for (int i = 0; i < minigameCameras.Length; i++)
+        {
+            if (minigameCameras[i] != null)
+                minigameCameras[i].gameObject.SetActive(false);
+        }
     }
 
     void StartStage()
@@ -63,10 +81,7 @@ public class StageManager : MonoBehaviour
         if (minigame != null)
             minigame.SetActive(true);
 
-        Debug.Log(
-            "Starting minigame: " +
-            minigame.name
-        );
+        Debug.Log("Starting minigame: " + minigame.name);
     }
 
     public void MinigameWon(string minigameName)
@@ -110,6 +125,8 @@ public class StageManager : MonoBehaviour
     {
         stageComplete = true;
 
+        SwitchToMainCamera();
+
         Debug.Log("STAGE " + CurrentStage + " COMPLETE!");
 
         if (stageCompleteScreen != null)
@@ -130,11 +147,13 @@ public class StageManager : MonoBehaviour
         currentStage++;
         stageComplete = false;
 
+        PlayerPrefs.SetInt("SelectedStage", CurrentStage);
+        PlayerPrefs.Save();
+
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
 
         ResetMinigames();
-
         StartStage();
     }
 
