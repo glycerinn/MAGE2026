@@ -82,6 +82,28 @@ public class CloudLine : MonoBehaviour
         }
     }
 
+    public Dictionary<CloudType, int> GetCloudCounts()
+    {
+        Dictionary<CloudType, int> counts =
+            new Dictionary<CloudType, int>();
+
+        for (int i = 0; i < cloudPrefabs.Count; i++)
+        {
+            if (cloudPrefabs[i] == null)
+                continue;
+
+            CloudType type = cloudPrefabs[i].cloudType;
+
+            if (!counts.ContainsKey(type))
+                counts[type] = 0;
+
+            if (i < cloudAmounts.Count)
+                counts[type] += cloudAmounts[i];
+        }
+
+        return counts;
+    }
+
     void MoveItems()
     {
         for (int i = 0; i < items.Count; i++)

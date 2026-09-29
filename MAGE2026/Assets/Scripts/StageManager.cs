@@ -4,6 +4,8 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
 
+    public GameObject diagnosisScreen;
+
     [Header("Minigames")]
     public GameObject[] minigames;
 
@@ -42,19 +44,10 @@ public class StageManager : MonoBehaviour
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
 
+        if (diagnosisScreen != null)
+            diagnosisScreen.SetActive(false);
+
         StartStage();
-    }
-
-    void SwitchToMainCamera()
-    {
-        if (mainCamera != null)
-            mainCamera.gameObject.SetActive(true);
-
-        for (int i = 0; i < minigameCameras.Length; i++)
-        {
-            if (minigameCameras[i] != null)
-                minigameCameras[i].gameObject.SetActive(false);
-        }
     }
 
     void StartStage()
@@ -62,6 +55,9 @@ public class StageManager : MonoBehaviour
         currentMinigame = 0;
 
         DisableAllMinigames();
+
+        if (DiagnosisManager.Instance != null)
+            DiagnosisManager.Instance.StartStageDiagnosis(CurrentStage);
 
         Debug.Log("Starting Stage " + CurrentStage);
 
@@ -72,16 +68,18 @@ public class StageManager : MonoBehaviour
     {
         if (currentMinigame > currentStage)
         {
-            CompleteStage();
+            StartDiagnosis();
             return;
         }
 
-        GameObject minigame = minigames[currentMinigame];
+        GameObject minigameObject = minigames[currentMinigame];
 
-        if (minigame != null)
-            minigame.SetActive(true);
+        if (minigameObject == null)
+            return;
 
-        Debug.Log("Starting minigame: " + minigame.name);
+        minigameObject.SetActive(true);
+
+        Debug.Log("Starting minigame: " + minigameObject.name);
     }
 
     public void MinigameWon(string minigameName)
@@ -94,11 +92,14 @@ public class StageManager : MonoBehaviour
         if (currentObject == null)
             return;
 
-        if (currentObject.name != minigameName)
+        if (!currentObject.TryGetComponent(out IMinigame minigame))
+            return;
+
+        if (minigame.MinigameName != minigameName)
         {
             Debug.LogWarning(
                 "Wrong minigame completed. Expected: " +
-                currentObject.name +
+                minigame.MinigameName +
                 " | Received: " +
                 minigameName
             );
@@ -108,29 +109,61 @@ public class StageManager : MonoBehaviour
 
         Debug.Log("Minigame complete: " + minigameName);
 
-        currentObject.SetActive(false);
-
         currentMinigame++;
 
         if (currentMinigame > currentStage)
         {
-            CompleteStage();
+            StartDiagnosis();
             return;
         }
 
         ActivateCurrentMinigame();
     }
 
+    void StartDiagnosis()
+    {
+        Debug.Log("ALL MINIGAMES COMPLETE. STARTING DIAGNOSIS.");
+
+        if (diagnosisScreen != null)
+            diagnosisScreen.SetActive(true);
+    }
+
+    public void CompleteDiagnosis()
+    {
+        if (diagnosisScreen != null)
+            diagnosisScreen.SetActive(false);
+
+        CompleteStage();
+    }
+
     void CompleteStage()
     {
         stageComplete = true;
-
-        SwitchToMainCamera();
 
         Debug.Log("STAGE " + CurrentStage + " COMPLETE!");
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(true);
+    }
+
+    public void RestartCurrentStage()
+    {
+        Debug.Log("WRONG DIAGNOSIS. RESTARTING STAGE " + CurrentStage);
+
+        stageComplete = false;
+
+        if (diagnosisScreen != null)
+            diagnosisScreen.SetActive(false);
+
+        if (stageCompleteScreen != null)
+            stageCompleteScreen.SetActive(false);
+
+        if (DiagnosisManager.Instance != null)
+            DiagnosisManager.Instance.ResetDiagnosis();
+
+        ResetMinigames();
+
+        StartStage();
     }
 
     public void NextStage()
