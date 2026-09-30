@@ -6,6 +6,9 @@ public class CloudMinigame : MonoBehaviour, IMinigame
     [Header("Cloud Lines")]
     public CloudLine[] cloudLines;
 
+    [Header("Clue")]
+    public CluePopup cluePopup;
+
     public string MinigameName => "CloudMinigame";
 
     private int sortedClouds;
@@ -48,9 +51,7 @@ public class CloudMinigame : MonoBehaviour, IMinigame
             new Dictionary<CloudType, int>();
 
         foreach (CloudType type in System.Enum.GetValues(typeof(CloudType)))
-        {
             cloudCounts[type] = 0;
-        }
 
         for (int i = 0; i < cloudLines.Length; i++)
         {
@@ -61,9 +62,7 @@ public class CloudMinigame : MonoBehaviour, IMinigame
                 cloudLines[i].GetCloudCounts();
 
             foreach (KeyValuePair<CloudType, int> pair in lineCounts)
-            {
                 cloudCounts[pair.Key] += pair.Value;
-            }
         }
 
         CloudType mostCommonType = CloudType.Cumulus;
@@ -95,10 +94,21 @@ public class CloudMinigame : MonoBehaviour, IMinigame
 
         if (DiagnosisManager.Instance != null)
         {
+            string cloudObservation =
+                mostCommonType.ToString();
+
             DiagnosisManager.Instance.SetObservation(
                 "Cloud",
-                mostCommonType.ToString()
+                cloudObservation
             );
+
+            if (cluePopup != null)
+            {
+                cluePopup.ShowClue(
+                    "Cloud",
+                    cloudObservation
+                );
+            }
         }
     }
 
@@ -107,6 +117,9 @@ public class CloudMinigame : MonoBehaviour, IMinigame
         sortedClouds = 0;
         totalClouds = 0;
         hasWon = false;
+
+        if (cluePopup != null)
+            cluePopup.HideClue();
 
         CloudType requiredType = GetRequiredCloudType();
 

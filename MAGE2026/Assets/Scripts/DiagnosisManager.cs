@@ -10,6 +10,8 @@ public class DiagnosisManager : MonoBehaviour
 
     private DiagnosisSO currentDiagnosisData;
 
+    private DiagnosisSO.DiagnosisRule currentRule;
+
     private Dictionary<string, string> observations =
         new Dictionary<string, string>();
 
@@ -27,27 +29,69 @@ public class DiagnosisManager : MonoBehaviour
     public void StartStageDiagnosis(int stage)
     {
         observations.Clear();
+        currentRule = null;
 
         int index = stage - 1;
 
         if (index < 0 || index >= stageDiagnoses.Length)
         {
-            Debug.LogError("No DiagnosisSO found for Stage " + stage);
+            Debug.LogError(
+                "No DiagnosisSO found for Stage " +
+                stage
+            );
+
             currentDiagnosisData = null;
             return;
         }
 
         currentDiagnosisData = stageDiagnoses[index];
 
+        if (currentDiagnosisData.rules == null ||
+            currentDiagnosisData.rules.Count == 0)
+        {
+            Debug.LogError(
+                "DiagnosisSO for Stage " +
+                stage +
+                " has no diagnosis rules."
+            );
+
+            return;
+        }
+
+        currentRule =
+            currentDiagnosisData.rules[
+                Random.Range(
+                    0,
+                    currentDiagnosisData.rules.Count
+                )
+            ];
+
         Debug.Log(
-            "Loaded diagnosis data for Stage " +
+            "Selected diagnosis for Stage " +
             stage +
             ": " +
-            currentDiagnosisData.name
+            currentRule.diagnosis
         );
+
+        for (int i = 0;
+            i < currentRule.conditions.Count;
+            i++)
+        {
+            DiagnosisSO.Condition condition =
+                currentRule.conditions[i];
+
+            Debug.Log(
+                "Selected clue: " +
+                condition.source +
+                " = " +
+                condition.value
+            );
+        }
     }
 
-    public void SetObservation(string source, string value)
+    public void SetObservation(
+        string source,
+        string value)
     {
         observations[source] = value;
 
@@ -61,33 +105,59 @@ public class DiagnosisManager : MonoBehaviour
 
     public string GetObservation(string source)
     {
-        if (observations.TryGetValue(source, out string value))
+        if (observations.TryGetValue(
+            source,
+            out string value))
+        {
             return value;
+        }
 
         return "";
     }
 
     public string GetRequiredObservation(string source)
     {
-        if (currentDiagnosisData == null)
+        if (currentRule == null)
         {
-            Debug.LogError("No DiagnosisSO is loaded.");
+            Debug.LogError(
+                "No diagnosis rule has been selected."
+            );
+
             return "";
         }
 
-        return currentDiagnosisData.GetRequiredObservation(source);
+        for (int i = 0;
+            i < currentRule.conditions.Count;
+            i++)
+        {
+            DiagnosisSO.Condition condition =
+                currentRule.conditions[i];
+
+            if (condition.source == source)
+                return condition.value;
+        }
+
+        Debug.LogWarning(
+            "No clue for source: " +
+            source
+        );
+
+        return "";
     }
 
     public bool SubmitDiagnosis(string diagnosis)
     {
-        if (currentDiagnosisData == null)
+        if (currentRule == null)
         {
-            Debug.LogError("No DiagnosisSO is loaded.");
+            Debug.LogError(
+                "No diagnosis rule has been selected."
+            );
+
             return false;
         }
 
         string correctDiagnosis =
-            currentDiagnosisData.GetDiagnosis(observations);
+            currentRule.diagnosis;
 
         Debug.Log(
             "Player diagnosis: " +
@@ -109,5 +179,6 @@ public class DiagnosisManager : MonoBehaviour
     public void ResetDiagnosis()
     {
         observations.Clear();
+        currentRule = null;
     }
 }

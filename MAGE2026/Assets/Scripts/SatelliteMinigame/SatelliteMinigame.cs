@@ -19,11 +19,14 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
     [Header("Alignment")]
     public float acceptableAngle = 5f;
+    public float requiredHoldTime = 2f;
 
     [Header("Input")]
     public KeyCode rotateLeft = KeyCode.A;
     public KeyCode rotateRight = KeyCode.D;
-    public KeyCode checkAlignment = KeyCode.Space;
+
+    [Header("Clue")]
+    public CluePopup cluePopup;
 
     [Header("Win Condition")]
     public int winAmount = 3;
@@ -31,6 +34,7 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
     private float lineAngle;
     private float targetAngle;
     private int completedRounds;
+    private float alignmentTimer;
     private bool hasWon;
 
     void Start()
@@ -44,11 +48,7 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             return;
 
         RotateLine();
-
-        if (Input.GetKeyDown(checkAlignment))
-        {
-            CheckAlignment();
-        }
+        CheckAlignment();
     }
 
     void RotateLine()
@@ -65,6 +65,7 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             return;
 
         lineAngle += direction * rotationSpeed * Time.deltaTime;
+
         lineAngle = Mathf.Clamp(
             lineAngle,
             targetMinAngle,
@@ -81,9 +82,24 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             Mathf.DeltaAngle(lineAngle, targetAngle)
         );
 
-        if (difference > acceptableAngle)
-            return;
+        if (difference <= acceptableAngle)
+        {
+            alignmentTimer += Time.deltaTime;
 
+            if (alignmentTimer >= requiredHoldTime)
+            {
+                CompleteRound();
+            }
+        }
+        else
+        {
+            alignmentTimer = 0f;
+        }
+    }
+
+    void CompleteRound()
+    {
+        alignmentTimer = 0f;
         completedRounds++;
 
         Debug.Log(
@@ -115,6 +131,8 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
         targetPivot.localRotation =
             Quaternion.Euler(0f, 0f, targetAngle);
+
+        alignmentTimer = 0f;
     }
 
     void ReportDiagnosisClue()
@@ -129,7 +147,9 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
         if (string.IsNullOrEmpty(satelliteClue))
         {
-            Debug.LogError("No Satellite diagnosis clue found.");
+            Debug.LogError(
+                "No Satellite diagnosis clue found."
+            );
             return;
         }
 
@@ -137,16 +157,31 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             "Satellite",
             satelliteClue
         );
+
+        if (cluePopup != null)
+        {
+            cluePopup.ShowClue(
+                "Satellite",
+                satelliteClue
+            );
+        }
     }
 
     public void ResetMinigame()
     {
         completedRounds = 0;
         hasWon = false;
+        alignmentTimer = 0f;
         lineAngle = 0f;
 
-        linePivot.localRotation = Quaternion.identity;
-        targetPivot.localRotation = Quaternion.identity;
+        if (cluePopup != null)
+            cluePopup.HideClue();
+
+        linePivot.localRotation =
+            Quaternion.identity;
+
+        targetPivot.localRotation =
+            Quaternion.identity;
 
         GenerateNewTarget();
     }

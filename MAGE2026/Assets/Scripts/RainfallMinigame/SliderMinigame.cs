@@ -7,6 +7,9 @@ public class SliderMinigame : MonoBehaviour, IMinigame
     [Header("Sliders")]
     public ObjectSlider[] sliders;
 
+    [Header("Rainfall Clue")]
+    public CluePopup cluePopup;
+
     [Header("Win Condition")]
     public int winAmount = 3;
 
@@ -68,25 +71,59 @@ public class SliderMinigame : MonoBehaviour, IMinigame
     {
         for (int i = 0; i < sliders.Length; i++)
         {
-            sliders[i].SetValue(Random.Range(0, 101));
+            sliders[i].SetValue(
+                Random.Range(0, 101)
+            );
         }
     }
 
     void ReportDiagnosisClue()
     {
         if (DiagnosisManager.Instance == null)
+        {
+            Debug.LogError(
+                "Rainfall: DiagnosisManager.Instance is NULL."
+            );
             return;
+        }
 
         string rainfallClue =
-            DiagnosisManager.Instance.GetRequiredObservation("Rainfall");
+            DiagnosisManager.Instance.GetRequiredObservation(
+                "Rainfall"
+            );
+
+        Debug.Log(
+            "Rainfall diagnosis clue received: " +
+            rainfallClue
+        );
 
         if (string.IsNullOrEmpty(rainfallClue))
         {
-            Debug.LogError("No Rainfall diagnosis clue found.");
+            Debug.LogError(
+                "Rainfall: No Rainfall diagnosis clue found."
+            );
             return;
         }
 
         DiagnosisManager.Instance.SetObservation(
+            "Rainfall",
+            rainfallClue
+        );
+
+        if (cluePopup == null)
+        {
+            Debug.LogError(
+                "Rainfall: Clue Popup is NOT assigned on SliderMinigame!"
+            );
+            return;
+        }
+
+        Debug.Log(
+            "Rainfall: Showing clue popup: " +
+            rainfallClue
+        );
+
+        cluePopup.ShowClue(
             "Rainfall",
             rainfallClue
         );
@@ -96,6 +133,9 @@ public class SliderMinigame : MonoBehaviour, IMinigame
     {
         completedRounds = 0;
         hasWon = false;
+
+        if (cluePopup != null)
+            cluePopup.HideClue();
 
         GenerateNewRound();
     }
