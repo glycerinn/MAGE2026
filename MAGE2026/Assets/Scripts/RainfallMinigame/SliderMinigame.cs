@@ -32,14 +32,15 @@ public class SliderMinigame : MonoBehaviour, IMinigame
 
         System.Array.Sort(values);
 
-        int medianValue = values[1];
+        int medianIndex = values.Length / 2;
+        int medianValue = values[medianIndex];
 
         if (selectedSlider.Value == medianValue)
         {
             completedRounds++;
 
             Debug.Log(
-                "Slider round complete! " +
+                "Rainfall round complete! " +
                 completedRounds + "/" + winAmount
             );
 
@@ -47,7 +48,9 @@ public class SliderMinigame : MonoBehaviour, IMinigame
             {
                 hasWon = true;
 
-                Debug.Log("SLIDER MINIGAME WON!");
+                ReportDiagnosisClue();
+
+                Debug.Log("RAINFALL MINIGAME WON!");
 
                 StageManager.Instance.MinigameWon(MinigameName);
                 return;
@@ -67,6 +70,26 @@ public class SliderMinigame : MonoBehaviour, IMinigame
         {
             sliders[i].SetValue(Random.Range(0, 101));
         }
+    }
+
+    void ReportDiagnosisClue()
+    {
+        if (DiagnosisManager.Instance == null)
+            return;
+
+        string rainfallClue =
+            DiagnosisManager.Instance.GetRequiredObservation("Rainfall");
+
+        if (string.IsNullOrEmpty(rainfallClue))
+        {
+            Debug.LogError("No Rainfall diagnosis clue found.");
+            return;
+        }
+
+        DiagnosisManager.Instance.SetObservation(
+            "Rainfall",
+            rainfallClue
+        );
     }
 
     public void ResetMinigame()

@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DiagnosisSO", menuName = "Game/Diagnosis SO")]
+[CreateAssetMenu(fileName = "DiagnosisSO", menuName = "Game/DiagnosisSO")]
 public class DiagnosisSO : ScriptableObject
 {
-    [System.Serializable]
-    public class DiagnosisRule
-    {
-        public string diagnosis;
-        public List<Condition> conditions = new List<Condition>();
-    }
-
     [System.Serializable]
     public class Condition
     {
         public string source;
         public string value;
+    }
+
+    [System.Serializable]
+    public class DiagnosisRule
+    {
+        public string diagnosis;
+        public List<Condition> conditions = new List<Condition>();
     }
 
     public List<DiagnosisRule> rules = new List<DiagnosisRule>();
@@ -24,11 +24,12 @@ public class DiagnosisSO : ScriptableObject
     {
         for (int i = 0; i < rules.Count; i++)
         {
+            DiagnosisRule rule = rules[i];
             bool matches = true;
 
-            for (int j = 0; j < rules[i].conditions.Count; j++)
+            for (int j = 0; j < rule.conditions.Count; j++)
             {
-                Condition condition = rules[i].conditions[j];
+                Condition condition = rule.conditions[j];
 
                 if (!observations.TryGetValue(condition.source, out string value))
                 {
@@ -44,7 +45,23 @@ public class DiagnosisSO : ScriptableObject
             }
 
             if (matches)
-                return rules[i].diagnosis;
+                return rule.diagnosis;
+        }
+
+        return "";
+    }
+
+    public string GetRequiredObservation(string source)
+    {
+        if (rules == null || rules.Count == 0)
+            return "";
+
+        for (int i = 0; i < rules[0].conditions.Count; i++)
+        {
+            Condition condition = rules[0].conditions[i];
+
+            if (condition.source == source)
+                return condition.value;
         }
 
         return "";

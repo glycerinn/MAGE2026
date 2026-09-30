@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df67b6c07045b8a47a570d75c16c795e, type: 3}
+  m_Name: Stage 4
+  m_EditorClassIdentifier: Assembly-CSharp::DiagnosisSO
+  rules:
+  - diagnosis: Sunny
+    conditions:
+    - source: Cloud
+      value: Stratus
+    - source: Satellite
+      value: Clear
+    - source: Humidity
+      value: 50%
+    - source: 'Rainfall '
+      value: 50 mm
+  - diagnosis: Rainy
+    conditions:
+    - source: Cloud
+      value: Nimbostratus
+    - source: Satellite
+      value: Cloudy
+    - source: Humidity
+      value: 50%
+    - source: Rainfall
+      value: 50 mm
+  - diagnosis: Thunderstorm
+    conditions:
+    - source: Cloud
+      value: Cumulus
+    - source: Satellite
+      value: Cloudy
+    - source: Humidity
+      value: 50%
+    - source: Rainfall
+      value: 50 mm
+  - diagnosis: Flood
+    conditions:
+    - source: Cloud
+      value: Cumulus
+    - source: Satellite
+      value: Very Cloudy
+    - source: Humidity
+      value: 80%
+    - source: Rainfall
+      value: 100 mm
+  - diagnosis: Landslide
+    conditions:
+    - source: Cloud
+      value: Nimbostratus
+    - source: Satellite
+      value: Very Cloudy
+    - source: Humidity
+      value: 80%
+    - source: Rainfall
+      value: 100 mm
+  - diagnosis: Drought
+    conditions:
+    - source: Cloud
+      value: Stratus
+    - source: Satellite
+      value: Clear
+    - source: Humidity
+      value: 35%
+    - source: Humidity
+      value: 0 mm

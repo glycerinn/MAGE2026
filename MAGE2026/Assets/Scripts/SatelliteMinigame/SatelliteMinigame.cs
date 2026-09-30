@@ -56,22 +56,23 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
         float direction = 0f;
 
         if (Input.GetKey(rotateLeft))
-        {
             direction += 1f;
-        }
 
         if (Input.GetKey(rotateRight))
-        {
             direction -= 1f;
-        }
 
         if (direction == 0f)
             return;
 
         lineAngle += direction * rotationSpeed * Time.deltaTime;
-        lineAngle = Mathf.Clamp(lineAngle, targetMinAngle, targetMaxAngle);
+        lineAngle = Mathf.Clamp(
+            lineAngle,
+            targetMinAngle,
+            targetMaxAngle
+        );
 
-        linePivot.localRotation = Quaternion.Euler(0f, 0f, lineAngle);
+        linePivot.localRotation =
+            Quaternion.Euler(0f, 0f, lineAngle);
     }
 
     void CheckAlignment()
@@ -80,27 +81,29 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             Mathf.DeltaAngle(lineAngle, targetAngle)
         );
 
-        if (difference <= acceptableAngle)
+        if (difference > acceptableAngle)
+            return;
+
+        completedRounds++;
+
+        Debug.Log(
+            "Satellite round complete! " +
+            completedRounds + "/" + winAmount
+        );
+
+        if (completedRounds >= winAmount)
         {
-            completedRounds++;
+            hasWon = true;
 
-            Debug.Log(
-                "Satellite round complete! " +
-                completedRounds + "/" + winAmount
-            );
+            ReportDiagnosisClue();
 
-            if (completedRounds >= winAmount)
-            {
-                hasWon = true;
+            Debug.Log("SATELLITE MINIGAME WON!");
 
-                Debug.Log("SATELLITE MINIGAME WON!");
-
-                StageManager.Instance.MinigameWon(MinigameName);
-                return;
-            }
-
-            GenerateNewTarget();
+            StageManager.Instance.MinigameWon(MinigameName);
+            return;
         }
+
+        GenerateNewTarget();
     }
 
     void GenerateNewTarget()
@@ -110,10 +113,29 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
             targetMaxAngle
         );
 
-        targetPivot.localRotation = Quaternion.Euler(
-            0f,
-            0f,
-            targetAngle
+        targetPivot.localRotation =
+            Quaternion.Euler(0f, 0f, targetAngle);
+    }
+
+    void ReportDiagnosisClue()
+    {
+        if (DiagnosisManager.Instance == null)
+            return;
+
+        string satelliteClue =
+            DiagnosisManager.Instance.GetRequiredObservation(
+                "Satellite"
+            );
+
+        if (string.IsNullOrEmpty(satelliteClue))
+        {
+            Debug.LogError("No Satellite diagnosis clue found.");
+            return;
+        }
+
+        DiagnosisManager.Instance.SetObservation(
+            "Satellite",
+            satelliteClue
         );
     }
 

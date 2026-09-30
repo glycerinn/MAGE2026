@@ -15,26 +15,27 @@ public class CloudLine : MonoBehaviour
     [Header("Cloud Prefabs")]
     public List<CloudItem> cloudPrefabs = new List<CloudItem>();
 
-    [Header("Amount Of Each")]
-    public List<int> cloudAmounts = new List<int>();
+    [Header("Total Clouds")]
+    public int totalCloudAmount = 10;
 
     [Header("Settings")]
     public bool randomizeOrder = true;
     public bool reverse = false;
 
     private List<CloudItem> items = new List<CloudItem>();
-    private float lineLength;
+    private Dictionary<CloudType, int> generatedCloudCounts =
+        new Dictionary<CloudType, int>();
 
+    private float lineLength;
     private CloudMinigame minigame;
     private int totalClouds;
 
     public int TotalClouds => totalClouds;
 
-    void Start()
+    void Awake()
     {
         lineLength = endX - startX;
         minigame = GetComponentInParent<CloudMinigame>();
-        SpawnClouds();
     }
 
     void Update()
@@ -42,66 +43,125 @@ public class CloudLine : MonoBehaviour
         MoveItems();
     }
 
-    void SpawnClouds()
+    public void GenerateClouds(CloudType requiredType)
     {
-        items.Clear();
+        ClearClouds();
 
-        List<CloudItem> spawnList = new List<CloudItem>();
+        generatedCloudCounts.Clear();
 
-        int count = Mathf.Min(cloudPrefabs.Count, cloudAmounts.Count);
-
-        for (int i = 0; i < count; i++)
+        if (cloudPrefabs == null || cloudPrefabs.Count == 0)
         {
-            if (cloudPrefabs[i] == null)
-                continue;
-
-            for (int j = 0; j < cloudAmounts[i]; j++)
-            {
-                spawnList.Add(cloudPrefabs[i]);
-            }
+            Debug.LogError(
+                "CloudLine has no Cloud Prefabs assigned!"
+            );
+            return;
         }
 
-        if (randomizeOrder)
-        {
-            ShuffleList(spawnList);
-        }
+        List<CloudItem> otherPrefabs =
+            new List<CloudItem>();
 
-        totalClouds = spawnList.Count;
-
-        for (int i = 0; i < spawnList.Count; i++)
-        {
-            CloudItem newItem = Instantiate(spawnList[i], transform);
-
-            newItem.cloudLine = this;
-            newItem.minigameCamera = minigameCamera;
-            newItem.conveyorDistance = i * itemSpacing;
-
-            items.Add(newItem);
-
-            PositionItem(newItem);
-        }
-    }
-
-    public Dictionary<CloudType, int> GetCloudCounts()
-    {
-        Dictionary<CloudType, int> counts =
-            new Dictionary<CloudType, int>();
+        CloudItem requiredPrefab = null;
 
         for (int i = 0; i < cloudPrefabs.Count; i++)
         {
             if (cloudPrefabs[i] == null)
                 continue;
 
-            CloudType type = cloudPrefabs[i].cloudType;
-
-            if (!counts.ContainsKey(type))
-                counts[type] = 0;
-
-            if (i < cloudAmounts.Count)
-                counts[type] += cloudAmounts[i];
+            if (cloudPrefabs[i].cloudType == requiredType)
+            {
+                requiredPrefab = cloudPrefabs[i];
+            }
+            else
+            {
+                otherPrefabs.Add(cloudPrefabs[i]);
+            }
         }
 
-        return counts;
+        if (requiredPrefab == null)
+        {
+            Debug.LogError(
+                "No cloud prefab exists for required type: " +
+                requiredType
+            );
+            return;
+        }
+
+        int amount = Mathf.Max(1, totalCloudAmount);
+
+        int requiredAmount =
+            Mathf.FloorToInt(amount / 2f) + 1;
+
+        int otherAmount =
+            amount - requiredAmount;
+
+        List<CloudItem> spawnList =
+            new List<CloudItem>();
+
+        for (int i = 0; i < requiredAmount; i++)
+        {
+            spawnList.Add(requiredPrefab);
+
+            if (!generatedCloudCounts.ContainsKey(requiredType))
+                generatedCloudCounts[requiredType] = 0;
+
+            generatedCloudCounts[requiredType]++;
+        }
+
+        for (int i = 0; i < otherAmount; i++)
+        {
+            if (otherPrefabs.Count == 0)
+                break;
+
+            CloudItem prefab =
+                otherPrefabs[
+                    Random.Range(0, otherPrefabs.Count)
+                ];
+
+            spawnList.Add(prefab);
+
+            if (!generatedCloudCounts.ContainsKey(prefab.cloudType))
+                generatedCloudCounts[prefab.cloudType] = 0;
+
+            generatedCloudCounts[prefab.cloudType]++;
+        }
+
+        if (randomizeOrder)
+            ShuffleList(spawnList);
+
+        totalClouds = spawnList.Count;
+
+        for (int i = 0; i < spawnList.Count; i++)
+        {
+            CloudItem newItem =
+                Instantiate(
+                    spawnList[i],
+                    transform
+                );
+
+            newItem.cloudLine = this;
+            newItem.minigameCamera = minigameCamera;
+            newItem.conveyorDistance =
+                i * itemSpacing;
+
+            items.Add(newItem);
+
+            PositionItem(newItem);
+        }
+
+        Debug.Log(
+            name +
+            " generated " +
+            totalClouds +
+            " clouds. Required majority: " +
+            requiredType
+        );
+    }
+
+    public Dictionary<CloudType, int> GetCloudCounts()
+    {
+        return new Dictionary<CloudType, int>(
+            generatedCloudCounts
+        );
     }
 
     void MoveItems()
@@ -113,7 +173,8 @@ public class CloudLine : MonoBehaviour
             if (item == null || item.IsDragging)
                 continue;
 
-            item.conveyorDistance += speed * Time.deltaTime;
+            item.conveyorDistance +=
+                speed * Time.deltaTime;
 
             if (item.conveyorDistance > lineLength)
             {
@@ -128,23 +189,36 @@ public class CloudLine : MonoBehaviour
     {
         Vector3 position = item.transform.position;
 
-        if(reverse == false)
+        if (!reverse)
         {
-            position.x = transform.position.x + startX + item.conveyorDistance;
-        }else if(reverse == true)
-        {
-            position.x = transform.position.x - startX - item.conveyorDistance;
+            position.x =
+                transform.position.x +
+                startX +
+                item.conveyorDistance;
         }
-        
+        else
+        {
+            position.x =
+                transform.position.x -
+                startX -
+                item.conveyorDistance;
+        }
+
         position.y = transform.position.y;
         position.z = transform.position.z;
 
         item.transform.position = position;
     }
 
-    public void ReturnItemToLine(CloudItem item, float originalDistance, float dragTime)
+    public void ReturnItemToLine(
+        CloudItem item,
+        float originalDistance,
+        float dragTime)
     {
-        item.conveyorDistance = originalDistance + speed * dragTime;
+        item.conveyorDistance =
+            originalDistance +
+            speed * dragTime;
+
         item.conveyorDistance %= lineLength;
 
         PositionItem(item);
@@ -158,36 +232,57 @@ public class CloudLine : MonoBehaviour
         Destroy(item.gameObject);
 
         if (minigame != null)
-        {
             minigame.CloudSorted();
-        }
     }
 
-    public void ResetLine()
+    void ClearClouds()
     {
         for (int i = items.Count - 1; i >= 0; i--)
         {
             if (items[i] != null)
-            {
                 Destroy(items[i].gameObject);
-            }
         }
 
         items.Clear();
-
-        SpawnClouds();
+        totalClouds = 0;
     }
 
     void ShuffleList(List<CloudItem> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int randomIndex = Random.Range(0, i + 1);
+            int randomIndex =
+                Random.Range(0, i + 1);
 
             CloudItem temp = list[i];
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
         }
+    }
+
+    public void ResetLine()
+    {
+        CloudType requiredType =
+            CloudType.Cumulus;
+
+        if (minigame != null)
+        {
+            if (DiagnosisManager.Instance != null)
+            {
+                string requiredCloud =
+                    DiagnosisManager.Instance
+                        .GetRequiredObservation("Cloud");
+
+                if (System.Enum.TryParse(
+                    requiredCloud,
+                    out CloudType parsedType))
+                {
+                    requiredType = parsedType;
+                }
+            }
+        }
+
+        GenerateClouds(requiredType);
     }
 
     private void OnDrawGizmos()

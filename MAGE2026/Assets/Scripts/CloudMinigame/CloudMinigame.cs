@@ -14,18 +14,7 @@ public class CloudMinigame : MonoBehaviour, IMinigame
 
     void Start()
     {
-        CalculateTotalClouds();
-    }
-
-    void CalculateTotalClouds()
-    {
-        totalClouds = 0;
-
-        for (int i = 0; i < cloudLines.Length; i++)
-        {
-            if (cloudLines[i] != null)
-                totalClouds += cloudLines[i].TotalClouds;
-        }
+        ResetMinigame();
     }
 
     public void CloudSorted()
@@ -45,9 +34,9 @@ public class CloudMinigame : MonoBehaviour, IMinigame
         {
             hasWon = true;
 
-            Debug.Log("CLOUD MINIGAME WON!");
-
             DetermineCloudObservation();
+
+            Debug.Log("CLOUD MINIGAME WON!");
 
             StageManager.Instance.MinigameWon(MinigameName);
         }
@@ -116,14 +105,55 @@ public class CloudMinigame : MonoBehaviour, IMinigame
     public void ResetMinigame()
     {
         sortedClouds = 0;
+        totalClouds = 0;
         hasWon = false;
 
-        CalculateTotalClouds();
+        CloudType requiredType = GetRequiredCloudType();
 
         for (int i = 0; i < cloudLines.Length; i++)
         {
-            if (cloudLines[i] != null)
-                cloudLines[i].ResetLine();
+            if (cloudLines[i] == null)
+                continue;
+
+            cloudLines[i].GenerateClouds(requiredType);
+            totalClouds += cloudLines[i].TotalClouds;
         }
+
+        Debug.Log(
+            "Cloud minigame generated with majority type: " +
+            requiredType +
+            " | Total clouds: " +
+            totalClouds
+        );
+    }
+
+    CloudType GetRequiredCloudType()
+    {
+        if (DiagnosisManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "DiagnosisManager not found. Defaulting to Cumulus."
+            );
+
+            return CloudType.Cumulus;
+        }
+
+        string requiredCloud =
+            DiagnosisManager.Instance.GetRequiredObservation("Cloud");
+
+        if (System.Enum.TryParse(
+            requiredCloud,
+            out CloudType cloudType))
+        {
+            return cloudType;
+        }
+
+        Debug.LogWarning(
+            "Could not parse required cloud type: " +
+            requiredCloud +
+            ". Defaulting to Cumulus."
+        );
+
+        return CloudType.Cumulus;
     }
 }

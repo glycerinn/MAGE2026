@@ -126,6 +126,9 @@ public class StageManager : MonoBehaviour
 
         if (diagnosisScreen != null)
             diagnosisScreen.SetActive(true);
+
+        if (DiagnosisUI.Instance != null)
+            DiagnosisUI.Instance.SetupForStage(CurrentStage);
     }
 
     public void CompleteDiagnosis()

@@ -32,11 +32,7 @@ public class DiagnosisManager : MonoBehaviour
 
         if (index < 0 || index >= stageDiagnoses.Length)
         {
-            Debug.LogError(
-                "No DiagnosisSO found for Stage " +
-                stage
-            );
-
+            Debug.LogError("No DiagnosisSO found for Stage " + stage);
             currentDiagnosisData = null;
             return;
         }
@@ -69,6 +65,17 @@ public class DiagnosisManager : MonoBehaviour
             return value;
 
         return "";
+    }
+
+    public string GetRequiredObservation(string source)
+    {
+        if (currentDiagnosisData == null)
+        {
+            Debug.LogError("No DiagnosisSO is loaded.");
+            return "";
+        }
+
+        return currentDiagnosisData.GetRequiredObservation(source);
     }
 
     public bool SubmitDiagnosis(string diagnosis)
