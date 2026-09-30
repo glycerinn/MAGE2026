@@ -131,10 +131,6 @@ public class CloudMinigame : MonoBehaviour, IMinigame
     {
         if (DiagnosisManager.Instance == null)
         {
-            Debug.LogWarning(
-                "DiagnosisManager not found. Defaulting to Cumulus."
-            );
-
             return CloudType.Cumulus;
         }
 
@@ -147,12 +143,6 @@ public class CloudMinigame : MonoBehaviour, IMinigame
         {
             return cloudType;
         }
-
-        Debug.LogWarning(
-            "Could not parse required cloud type: " +
-            requiredCloud +
-            ". Defaulting to Cumulus."
-        );
 
         return CloudType.Cumulus;
     }
