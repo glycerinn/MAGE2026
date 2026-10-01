@@ -41,7 +41,9 @@ public class CloudMinigame : MonoBehaviour, IMinigame
 
             Debug.Log("CLOUD MINIGAME WON!");
 
-            StageManager.Instance.MinigameWon(MinigameName);
+            StageManager.Instance.MinigameWon(
+                MinigameName
+            );
         }
     }
 
@@ -50,8 +52,11 @@ public class CloudMinigame : MonoBehaviour, IMinigame
         Dictionary<CloudType, int> cloudCounts =
             new Dictionary<CloudType, int>();
 
-        foreach (CloudType type in System.Enum.GetValues(typeof(CloudType)))
+        foreach (CloudType type in System.Enum.GetValues(
+            typeof(CloudType)))
+        {
             cloudCounts[type] = 0;
+        }
 
         for (int i = 0; i < cloudLines.Length; i++)
         {
@@ -65,7 +70,9 @@ public class CloudMinigame : MonoBehaviour, IMinigame
                 cloudCounts[pair.Key] += pair.Value;
         }
 
-        CloudType mostCommonType = CloudType.Cumulus;
+        CloudType mostCommonType =
+            CloudType.Cumulus;
+
         int highestCount = -1;
 
         foreach (KeyValuePair<CloudType, int> pair in cloudCounts)
@@ -121,15 +128,72 @@ public class CloudMinigame : MonoBehaviour, IMinigame
         if (cluePopup != null)
             cluePopup.HideClue();
 
-        CloudType requiredType = GetRequiredCloudType();
+        Debug.Log(
+            "Cloud minigame reset. " +
+            "Cloud generation will happen when the stage starts."
+        );
+    }
+
+    public void StartCloudMinigame()
+    {
+        sortedClouds = 0;
+        totalClouds = 0;
+        hasWon = false;
+
+        if (cluePopup != null)
+            cluePopup.HideClue();
+
+        if (DiagnosisManager.Instance == null)
+        {
+            Debug.LogError(
+                "CloudMinigame: DiagnosisManager.Instance is null."
+            );
+
+            return;
+        }
+
+        string requiredCloud =
+            DiagnosisManager.Instance.GetRequiredObservation(
+                "Cloud"
+            );
+
+        if (string.IsNullOrEmpty(requiredCloud))
+        {
+            Debug.LogError(
+                "CloudMinigame: No Cloud clue was selected."
+            );
+
+            return;
+        }
+
+        if (!System.Enum.TryParse(
+            requiredCloud,
+            out CloudType requiredType))
+        {
+            Debug.LogError(
+                "CloudMinigame: Could not parse Cloud clue: " +
+                requiredCloud
+            );
+
+            return;
+        }
+
+        Debug.Log(
+            "Cloud minigame using selected diagnosis cloud: " +
+            requiredType
+        );
 
         for (int i = 0; i < cloudLines.Length; i++)
         {
             if (cloudLines[i] == null)
                 continue;
 
-            cloudLines[i].GenerateClouds(requiredType);
-            totalClouds += cloudLines[i].TotalClouds;
+            cloudLines[i].GenerateClouds(
+                requiredType
+            );
+
+            totalClouds +=
+                cloudLines[i].TotalClouds;
         }
 
         Debug.Log(
@@ -138,25 +202,5 @@ public class CloudMinigame : MonoBehaviour, IMinigame
             " | Total clouds: " +
             totalClouds
         );
-    }
-
-    CloudType GetRequiredCloudType()
-    {
-        if (DiagnosisManager.Instance == null)
-        {
-            return CloudType.Cumulus;
-        }
-
-        string requiredCloud =
-            DiagnosisManager.Instance.GetRequiredObservation("Cloud");
-
-        if (System.Enum.TryParse(
-            requiredCloud,
-            out CloudType cloudType))
-        {
-            return cloudType;
-        }
-
-        return CloudType.Cumulus;
     }
 }

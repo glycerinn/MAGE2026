@@ -11,6 +11,7 @@ public class DiagnosisUI : MonoBehaviour
     public int[] choicesPerStage = { 3, 5, 6, 6 };
 
     private DiagnosisChoice selectedChoice;
+    private bool ready;
 
     void Awake()
     {
@@ -20,42 +21,60 @@ public class DiagnosisUI : MonoBehaviour
     public void SetupForStage(int stage)
     {
         selectedChoice = null;
+        ready = false;
 
-        Debug.Log(
-            "Stage received: " +
-            stage
-        );
+        Debug.Log("Stage received: " + stage);
 
         int stageIndex = stage - 1;
 
-        if (stageIndex < 0 || stageIndex >= choicesPerStage.Length)
+        if (stageIndex < 0 ||
+            stageIndex >= choicesPerStage.Length)
         {
+            Debug.LogError(
+                "Invalid diagnosis stage: " +
+                stage
+            );
+
             return;
         }
 
-        int activeChoiceCount = choicesPerStage[stageIndex];
+        int activeChoiceCount =
+            choicesPerStage[stageIndex];
 
         for (int i = 0; i < choices.Length; i++)
         {
             if (choices[i] == null)
-            {
                 continue;
-            }
+
+            choices[i].SetSelected(false);
 
             bool shouldBeActive =
                 i < activeChoiceCount;
 
-            choices[i].SetSelected(false);
-            choices[i].SetAvailable(shouldBeActive);
+            choices[i].SetAvailable(
+                shouldBeActive
+            );
         }
+
+        ready = true;
 
         Debug.Log(
             "========== DIAGNOSIS SETUP COMPLETE =========="
         );
     }
 
-    public void SelectDiagnosis(DiagnosisChoice choice)
+    public void SelectDiagnosis(
+        DiagnosisChoice choice)
     {
+        if (!ready)
+        {
+            Debug.LogWarning(
+                "Diagnosis UI is not ready yet."
+            );
+
+            return;
+        }
+
         if (choice == null)
             return;
 
@@ -64,9 +83,11 @@ public class DiagnosisUI : MonoBehaviour
         for (int i = 0; i < choices.Length; i++)
         {
             if (choices[i] != null)
+            {
                 choices[i].SetSelected(
                     choices[i] == selectedChoice
                 );
+            }
         }
 
         Debug.Log(
@@ -77,11 +98,30 @@ public class DiagnosisUI : MonoBehaviour
 
     public void SubmitDiagnosis()
     {
+        if (!ready)
+        {
+            Debug.LogWarning(
+                "Diagnosis UI is not ready yet."
+            );
+
+            return;
+        }
+
         if (selectedChoice == null)
         {
             Debug.LogWarning(
                 "No diagnosis selected."
             );
+
+            return;
+        }
+
+        if (DiagnosisManager.Instance == null)
+        {
+            Debug.LogError(
+                "DiagnosisManager.Instance is null."
+            );
+
             return;
         }
 
@@ -100,10 +140,22 @@ public class DiagnosisUI : MonoBehaviour
 
         if (correct)
         {
+            ready = false;
+
+            Debug.Log(
+                "Diagnosis correct. Completing stage."
+            );
+
             StageManager.Instance.CompleteDiagnosis();
         }
         else
         {
+            ready = false;
+
+            Debug.Log(
+                "Diagnosis incorrect. Restarting stage."
+            );
+
             StageManager.Instance.RestartCurrentStage();
         }
     }
@@ -111,6 +163,7 @@ public class DiagnosisUI : MonoBehaviour
     public void ResetUI()
     {
         selectedChoice = null;
+        ready = false;
 
         for (int i = 0; i < choices.Length; i++)
         {

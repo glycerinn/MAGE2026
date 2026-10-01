@@ -16,6 +16,9 @@ public class StageManager : MonoBehaviour
     [Header("Stage Complete UI")]
     public GameObject stageCompleteScreen;
 
+    [Header("Stage Complete Animation")]
+    public StageFinishAnimation stageAnimation;
+
     private int currentStage;
     private int currentMinigame;
     private bool stageComplete;
@@ -79,7 +82,16 @@ public class StageManager : MonoBehaviour
 
         minigameObject.SetActive(true);
 
-        Debug.Log("Starting minigame: " + minigameObject.name);
+        if (minigameObject.TryGetComponent(
+            out CloudMinigame cloudMinigame))
+        {
+            cloudMinigame.StartCloudMinigame();
+        }
+
+        Debug.Log(
+            "Starting minigame: " +
+            minigameObject.name
+        );
     }
 
     public void MinigameWon(string minigameName)
@@ -124,11 +136,11 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log("ALL MINIGAMES COMPLETE. STARTING DIAGNOSIS.");
 
-        if (diagnosisScreen != null)
-            diagnosisScreen.SetActive(true);
-
         if (DiagnosisUI.Instance != null)
             DiagnosisUI.Instance.SetupForStage(CurrentStage);
+
+        if (diagnosisScreen != null)
+            diagnosisScreen.SetActive(true);
     }
 
     public void CompleteDiagnosis()
@@ -147,6 +159,9 @@ public class StageManager : MonoBehaviour
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(true);
+
+        if (stageAnimation != null)
+            stageAnimation.Play();
     }
 
     public void RestartCurrentStage()
@@ -163,6 +178,9 @@ public class StageManager : MonoBehaviour
 
         if (DiagnosisManager.Instance != null)
             DiagnosisManager.Instance.ResetDiagnosis();
+
+        if (stageAnimation != null)
+            stageAnimation.Hide();
 
         ResetMinigames();
 
@@ -185,6 +203,9 @@ public class StageManager : MonoBehaviour
 
         PlayerPrefs.SetInt("SelectedStage", CurrentStage);
         PlayerPrefs.Save();
+
+        if (stageAnimation != null)
+            stageAnimation.Hide();
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);

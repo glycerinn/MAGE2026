@@ -17,9 +17,7 @@ public class DiagnosisChoice : MonoBehaviour
     void OnMouseDown()
     {
         if (!available)
-        {
             return;
-        }
 
         Select();
     }
@@ -27,13 +25,14 @@ public class DiagnosisChoice : MonoBehaviour
     public void Select()
     {
         if (!available)
-        {
             return;
-        }
 
         if (DiagnosisUI.Instance == null)
         {
-            Debug.LogError("DiagnosisUI.Instance is null.");
+            Debug.LogError(
+                "DiagnosisUI.Instance is null."
+            );
+
             return;
         }
 
