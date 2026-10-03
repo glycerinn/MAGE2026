@@ -5,16 +5,6 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
 
-    [Header("Yarn Dialogue")]
-    public DialogueRunner dialogueRunner;
-    public string[] stageDialogueNodes =
-    {
-        "Stage1",
-        "Stage2",
-        "Stage3",
-        "Stage4"
-    };
-
     [Header("Minigames")]
     public GameObject[] minigames;
 
@@ -27,6 +17,17 @@ public class StageManager : MonoBehaviour
 
     [Header("Stage Complete Animation")]
     public StageFinishAnimation stageAnimation;
+
+    [Header("Yarn Dialogue")]
+    public DialogueRunner dialogueRunner;
+    public string[] stageDialogueNodes =
+    {
+        "Stage1",
+        "Stage2",
+        "Stage3",
+        "Stage4",
+        "Stage5"
+    };
 
     private int currentStage;
     private int currentMinigame;
@@ -47,8 +48,15 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        currentStage = PlayerPrefs.GetInt("SelectedStage", 1) - 1;
-        currentStage = Mathf.Clamp(currentStage, 0, minigames.Length - 1);
+        currentStage =
+            PlayerPrefs.GetInt("SelectedStage", 1) - 1;
+
+        currentStage =
+            Mathf.Clamp(
+                currentStage,
+                0,
+                4
+            );
 
         currentMinigame = 0;
         stageComplete = false;
@@ -62,13 +70,30 @@ public class StageManager : MonoBehaviour
     void StartStage()
     {
         currentMinigame = 0;
-        DisableAllMinigames();
-        
-        if (DiagnosisManager.Instance != null)
-            DiagnosisManager.Instance.StartStageDiagnosis(CurrentStage);
 
-        Debug.Log("Starting Stage " + CurrentStage);
+        DisableAllMinigames();
+
+        if (DiagnosisManager.Instance != null)
+        {
+            DiagnosisManager.Instance.StartStageDiagnosis(
+                CurrentStage
+            );
+        }
+
+        Debug.Log(
+            "Starting Stage " +
+            CurrentStage
+        );
+
         StartStageDialogue();
+    }
+
+    int GetMinigameCountForStage()
+    {
+        return Mathf.Min(
+            CurrentStage,
+            minigames.Length
+        );
     }
 
     void StartStageDialogue()
@@ -76,14 +101,16 @@ public class StageManager : MonoBehaviour
         if (dialogueRunner == null)
         {
             Debug.LogWarning(
-                "No DialogueRunner assigned. Starting minigame immediately."
+                "No DialogueRunner assigned. " +
+                "Starting minigame immediately."
             );
 
             ActivateCurrentMinigame();
             return;
         }
 
-        int dialogueIndex = CurrentStage - 1;
+        int dialogueIndex =
+            CurrentStage - 1;
 
         if (dialogueIndex < 0 ||
             dialogueIndex >= stageDialogueNodes.Length)
@@ -127,22 +154,32 @@ public class StageManager : MonoBehaviour
 
     void OnStageDialogueComplete()
     {
-        dialogueRunner.onDialogueComplete.RemoveListener(OnStageDialogueComplete);
+        dialogueRunner.onDialogueComplete.RemoveListener(
+            OnStageDialogueComplete
+        );
 
-        Debug.Log("Stage " + CurrentStage + " opening dialogue complete.");
+        Debug.Log(
+            "Stage " +
+            CurrentStage +
+            " opening dialogue complete."
+        );
 
         ActivateCurrentMinigame();
     }
 
     void ActivateCurrentMinigame()
     {
-        if (currentMinigame > currentStage)
+        int minigameCount =
+            GetMinigameCountForStage();
+
+        if (currentMinigame >= minigameCount)
         {
             StartDiagnosis();
             return;
         }
 
-        GameObject minigameObject = minigames[currentMinigame];
+        GameObject minigameObject =
+            minigames[currentMinigame];
 
         if (minigameObject == null)
             return;
@@ -153,6 +190,11 @@ public class StageManager : MonoBehaviour
             out CloudMinigame cloudMinigame))
         {
             cloudMinigame.StartCloudMinigame();
+        }
+
+        if (minigameObject.TryGetComponent(out HumidityMinigame humidityMinigame))
+        {
+            humidityMinigame.StartHumidityMinigame();
         }
 
         Debug.Log(
@@ -166,24 +208,45 @@ public class StageManager : MonoBehaviour
         if (stageComplete)
             return;
 
-        GameObject currentObject = minigames[currentMinigame];
-
-        if (currentObject == null)
-            return;
-
-        if (!currentObject.TryGetComponent(out IMinigame minigame))
-            return;
-
-        if (minigame.MinigameName != minigameName)
+        if (currentMinigame >=
+            GetMinigameCountForStage())
         {
             return;
         }
 
-        Debug.Log("Minigame complete: " + minigameName);
+        GameObject currentObject =
+            minigames[currentMinigame];
+
+        if (currentObject == null)
+            return;
+
+        if (!currentObject.TryGetComponent(
+            out IMinigame minigame))
+        {
+            return;
+        }
+
+        if (minigame.MinigameName != minigameName)
+        {
+            Debug.LogWarning(
+                "Wrong minigame completed. Expected: " +
+                minigame.MinigameName +
+                " | Received: " +
+                minigameName
+            );
+
+            return;
+        }
+
+        Debug.Log(
+            "Minigame complete: " +
+            minigameName
+        );
 
         currentMinigame++;
 
-        if (currentMinigame > currentStage)
+        if (currentMinigame >=
+            GetMinigameCountForStage())
         {
             StartDiagnosis();
             return;
@@ -194,10 +257,17 @@ public class StageManager : MonoBehaviour
 
     void StartDiagnosis()
     {
-        Debug.Log("ALL MINIGAMES COMPLETE. STARTING DIAGNOSIS.");
+        Debug.Log(
+            "ALL MINIGAMES COMPLETE. " +
+            "STARTING DIAGNOSIS."
+        );
 
         if (DiagnosisUI.Instance != null)
-            DiagnosisUI.Instance.SetupForStage(CurrentStage);
+        {
+            DiagnosisUI.Instance.SetupForStage(
+                CurrentStage
+            );
+        }
     }
 
     public void CompleteDiagnosis()
@@ -209,7 +279,11 @@ public class StageManager : MonoBehaviour
     {
         stageComplete = true;
 
-        Debug.Log("STAGE " + CurrentStage + " COMPLETE!");
+        Debug.Log(
+            "STAGE " +
+            CurrentStage +
+            " COMPLETE!"
+        );
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(true);
@@ -220,7 +294,11 @@ public class StageManager : MonoBehaviour
 
     public void RestartCurrentStage()
     {
-        Debug.Log("WRONG DIAGNOSIS. RESTARTING STAGE " + CurrentStage);
+        Debug.Log(
+            "WRONG DIAGNOSIS. " +
+            "RESTARTING STAGE " +
+            CurrentStage
+        );
 
         stageComplete = false;
 
@@ -229,6 +307,9 @@ public class StageManager : MonoBehaviour
 
         if (DiagnosisManager.Instance != null)
             DiagnosisManager.Instance.ResetDiagnosis();
+
+        if (DiagnosisUI.Instance != null)
+            DiagnosisUI.Instance.ResetUI();
 
         if (stageAnimation != null)
             stageAnimation.Hide();
@@ -243,16 +324,23 @@ public class StageManager : MonoBehaviour
         if (!stageComplete)
             return;
 
-        if (currentStage >= minigames.Length - 1)
+        if (currentStage >= 4)
         {
-            Debug.Log("ALL STAGES COMPLETE!");
+            Debug.Log(
+                "ALL STAGES COMPLETE!"
+            );
+
             return;
         }
 
         currentStage++;
         stageComplete = false;
 
-        PlayerPrefs.SetInt("SelectedStage", CurrentStage);
+        PlayerPrefs.SetInt(
+            "SelectedStage",
+            CurrentStage
+        );
+
         PlayerPrefs.Save();
 
         if (stageAnimation != null)
@@ -262,26 +350,34 @@ public class StageManager : MonoBehaviour
             stageCompleteScreen.SetActive(false);
 
         ResetMinigames();
+
         StartStage();
     }
 
     void ResetMinigames()
     {
-        for (int i = 0; i < minigames.Length; i++)
+        for (int i = 0;
+            i < minigames.Length;
+            i++)
         {
             if (minigames[i] == null)
                 continue;
 
             minigames[i].SetActive(false);
 
-            if (minigames[i].TryGetComponent(out IMinigame minigame))
+            if (minigames[i].TryGetComponent(
+                out IMinigame minigame))
+            {
                 minigame.ResetMinigame();
+            }
         }
     }
 
     void DisableAllMinigames()
     {
-        for (int i = 0; i < minigames.Length; i++)
+        for (int i = 0;
+            i < minigames.Length;
+            i++)
         {
             if (minigames[i] != null)
                 minigames[i].SetActive(false);

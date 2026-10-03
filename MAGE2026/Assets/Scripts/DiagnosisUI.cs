@@ -8,7 +8,7 @@ public class DiagnosisUI : MonoBehaviour
     public DiagnosisChoice[] choices;
 
     [Header("Choices Per Stage")]
-    public int[] choicesPerStage = { 3, 5, 6, 6 };
+    public int[] choicesPerStage = { 3, 5, 6, 6, 6 };
 
     private DiagnosisChoice selectedChoice;
     private bool ready;
@@ -24,7 +24,10 @@ public class DiagnosisUI : MonoBehaviour
         selectedChoice = null;
         ready = false;
 
-        Debug.Log("Setting up diagnosis for Stage " + stage);
+        Debug.Log(
+            "Setting up diagnosis for Stage " +
+            stage
+        );
 
         int stageIndex = stage - 1;
 
@@ -42,7 +45,9 @@ public class DiagnosisUI : MonoBehaviour
         int activeChoiceCount =
             choicesPerStage[stageIndex];
 
-        for (int i = 0; i < choices.Length; i++)
+        for (int i = 0;
+            i < choices.Length;
+            i++)
         {
             if (choices[i] == null)
                 continue;
@@ -57,6 +62,11 @@ public class DiagnosisUI : MonoBehaviour
             );
         }
 
+        if (HeadlineClue.Instance != null)
+        {
+            HeadlineClue.Instance.ShowForStage(stage);
+        }
+
         ready = true;
 
         Debug.Log(
@@ -64,13 +74,12 @@ public class DiagnosisUI : MonoBehaviour
         );
     }
 
-    public void SelectDiagnosis(DiagnosisChoice choice)
+    public void SelectDiagnosis(
+        DiagnosisChoice choice)
     {
         if (!ready)
         {
-            Debug.LogWarning(
-                "Diagnosis UI is not ready yet."
-            );
+            Debug.LogWarning("Diagnosis UI is not ready yet.");
 
             return;
         }
@@ -80,7 +89,9 @@ public class DiagnosisUI : MonoBehaviour
 
         selectedChoice = choice;
 
-        for (int i = 0; i < choices.Length; i++)
+        for (int i = 0;
+            i < choices.Length;
+            i++)
         {
             if (choices[i] != null)
             {
@@ -100,38 +111,28 @@ public class DiagnosisUI : MonoBehaviour
     {
         if (!ready)
         {
-            Debug.LogWarning(
-                "Diagnosis UI is not ready yet."
-            );
+            Debug.LogWarning("Diagnosis UI is not ready yet.");
 
             return;
         }
 
         if (selectedChoice == null)
         {
-            Debug.LogWarning(
-                "No diagnosis selected."
-            );
+            Debug.LogWarning("No diagnosis selected.");
 
             return;
         }
 
         if (DiagnosisManager.Instance == null)
         {
-            Debug.LogError(
-                "DiagnosisManager.Instance is null."
-            );
+            Debug.LogError("DiagnosisManager.Instance is null.");
 
             return;
         }
 
-        string diagnosis =
-            selectedChoice.diagnosis;
+        string diagnosis = selectedChoice.diagnosis;
 
-        Debug.Log(
-            "Submitting diagnosis: " +
-            diagnosis
-        );
+        Debug.Log("Submitting diagnosis: " + diagnosis);
 
         bool correct =
             DiagnosisManager.Instance.SubmitDiagnosis(
@@ -143,7 +144,8 @@ public class DiagnosisUI : MonoBehaviour
         if (correct)
         {
             Debug.Log(
-                "Diagnosis correct. Completing stage."
+                "Diagnosis correct. " +
+                "Completing stage."
             );
 
             StageManager.Instance.CompleteDiagnosis();
@@ -151,7 +153,8 @@ public class DiagnosisUI : MonoBehaviour
         else
         {
             Debug.Log(
-                "Diagnosis incorrect. Restarting stage."
+                "Diagnosis incorrect. " +
+                "Restarting stage."
             );
 
             StageManager.Instance.RestartCurrentStage();
@@ -163,12 +166,19 @@ public class DiagnosisUI : MonoBehaviour
         selectedChoice = null;
         ready = false;
 
-        for (int i = 0; i < choices.Length; i++)
+        for (int i = 0;
+            i < choices.Length;
+            i++)
         {
             if (choices[i] != null)
             {
                 choices[i].SetSelected(false);
             }
+        }
+
+        if (HeadlineClue.Instance != null)
+        {
+            HeadlineClue.Instance.Hide();
         }
     }
 }

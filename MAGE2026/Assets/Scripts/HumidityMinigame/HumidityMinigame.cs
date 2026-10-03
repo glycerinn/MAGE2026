@@ -13,20 +13,20 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
     [Header("Clue")]
     public CluePopup cluePopup;
 
-    [Header("Win Condition")]
-    public int winAmount = 3;
-
     private int majorityValue;
-    private int completedRounds;
+    private bool hasWon;
 
-    void Start()
+    public void StartHumidityMinigame()
     {
-        ResetMinigame();
+        GenerateNewRound();
     }
 
     public void SliderButtonPressed(HumiditySlider slider)
     {
-        if (slider.IsLocked)
+        if (hasWon)
+            return;
+
+        if (slider == null || slider.IsLocked)
             return;
 
         int newValue =
@@ -44,10 +44,58 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
 
     void GenerateNewRound()
     {
-        majorityValue =
-            allowedValues[
-                Random.Range(0, allowedValues.Length)
-            ];
+        hasWon = false;
+
+        if (DiagnosisManager.Instance == null)
+        {
+            Debug.LogError(
+                "HumidityMinigame: DiagnosisManager.Instance is null."
+            );
+
+            return;
+        }
+
+        string requiredHumidity =
+            DiagnosisManager.Instance.GetRequiredObservation(
+                "Humidity"
+            );
+
+        if (string.IsNullOrEmpty(requiredHumidity))
+        {
+            Debug.LogError(
+                "HumidityMinigame: No Humidity diagnosis clue was selected."
+            );
+
+            return;
+        }
+
+        string cleanHumidity = requiredHumidity.Replace("%", "").Trim();
+
+        if (!int.TryParse(
+            cleanHumidity,
+            out majorityValue))
+        {
+            Debug.LogError(
+                "HumidityMinigame: Could not parse Humidity clue: " +
+                requiredHumidity
+            );
+
+            return;
+        }
+
+        Debug.Log(
+            "Humidity minigame using selected diagnosis humidity: " +
+            majorityValue
+        );
+
+        if (sliders == null || sliders.Length == 0)
+        {
+            Debug.LogError(
+                "HumidityMinigame: No sliders assigned."
+            );
+
+            return;
+        }
 
         int[] majoritySlots =
             new int[sliders.Length];
@@ -65,15 +113,19 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             majoritySlots[randomIndex] = temp;
         }
 
+        int majorityCount =
+            Mathf.Min(3, sliders.Length);
+
         for (int i = 0; i < sliders.Length; i++)
         {
+            if (sliders[i] == null)
+                continue;
+
             sliders[i].Unlock();
 
             bool isMajority = false;
 
-            for (int j = 0;
-                j < 3 && j < majoritySlots.Length;
-                j++)
+            for (int j = 0; j < majorityCount; j++)
             {
                 if (majoritySlots[j] == i)
                 {
@@ -101,34 +153,38 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
                 sliders[i].SetValue(startingValue);
             }
         }
+
+        Debug.Log(
+            "Humidity round generated. " +
+            "Majority value: " +
+            majorityValue
+        );
     }
 
     void CheckComplete()
     {
         for (int i = 0; i < sliders.Length; i++)
         {
+            if (sliders[i] == null)
+                continue;
+
             if (!sliders[i].IsLocked)
                 return;
         }
 
-        completedRounds++;
+        hasWon = true;
+
+        ReportDiagnosisClue();
 
         Debug.Log(
-            "Humidity round complete! " +
-            completedRounds + "/" + winAmount
+            "HUMIDITY MINIGAME WON! " +
+            "Correct humidity: " +
+            majorityValue
         );
 
-        if (completedRounds >= winAmount)
-        {
-            ReportDiagnosisClue();
-
-            Debug.Log("HUMIDITY MINIGAME WON!");
-
-            StageManager.Instance.MinigameWon(MinigameName);
-            return;
-        }
-
-        GenerateNewRound();
+        StageManager.Instance.MinigameWon(
+            MinigameName
+        );
     }
 
     void ReportDiagnosisClue()
@@ -146,6 +202,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             Debug.LogError(
                 "No Humidity diagnosis clue found."
             );
+
             return;
         }
 
@@ -165,7 +222,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
 
     public void ResetMinigame()
     {
-        completedRounds = 0;
+        hasWon = false;
         majorityValue = 0;
 
         if (cluePopup != null)

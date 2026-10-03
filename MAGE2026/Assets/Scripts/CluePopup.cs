@@ -34,10 +34,10 @@ public class CluePopup : MonoBehaviour
                 return "Satellite Imagery: " + value;
 
             case "Humidity":
-                return "Humidity: " + value + "%";
+                return "Humidity: " + value;
 
             case "Rainfall":
-                return "Rainfall: " + value + "%";
+                return "Rainfall: " + value;
 
             default:
                 return source + ": " + value;

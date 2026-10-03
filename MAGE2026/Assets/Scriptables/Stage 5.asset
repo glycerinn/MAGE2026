@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df67b6c07045b8a47a570d75c16c795e, type: 3}
-  m_Name: Stage 4
+  m_Name: Stage 5
   m_EditorClassIdentifier: Assembly-CSharp::DiagnosisSO
   rules:
   - diagnosis: Sunny
@@ -23,6 +23,8 @@ MonoBehaviour:
       value: 50%
     - source: 'Rainfall '
       value: 50 mm
+    - source: Headline
+      value: Merch sale
   - diagnosis: Rainy
     conditions:
     - source: Cloud
@@ -33,6 +35,8 @@ MonoBehaviour:
       value: 50%
     - source: Rainfall
       value: 50 mm
+    - source: Headline
+      value: Anime con
   - diagnosis: Thunderstorm
     conditions:
     - source: Cloud
@@ -43,6 +47,8 @@ MonoBehaviour:
       value: 50%
     - source: Rainfall
       value: 50 mm
+    - source: Headline
+      value: Lightning strike
   - diagnosis: Flood
     conditions:
     - source: Cloud
@@ -53,6 +59,8 @@ MonoBehaviour:
       value: 80%
     - source: Rainfall
       value: 100 mm
+    - source: Headline
+      value: River overflow
   - diagnosis: Landslide
     conditions:
     - source: Cloud
@@ -63,6 +71,8 @@ MonoBehaviour:
       value: 80%
     - source: Rainfall
       value: 100 mm
+    - source: Headline
+      value: Slope move
   - diagnosis: Drought
     conditions:
     - source: Cloud
@@ -73,3 +83,5 @@ MonoBehaviour:
       value: 35%
     - source: Rainfall
       value: 0 mm
+    - source: Headline
+      value: No rain
