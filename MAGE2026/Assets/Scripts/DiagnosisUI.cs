@@ -16,6 +16,7 @@ public class DiagnosisUI : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        ready = false;
     }
 
     public void SetupForStage(int stage)
@@ -23,7 +24,7 @@ public class DiagnosisUI : MonoBehaviour
         selectedChoice = null;
         ready = false;
 
-        Debug.Log("Stage received: " + stage);
+        Debug.Log("Setting up diagnosis for Stage " + stage);
 
         int stageIndex = stage - 1;
 
@@ -63,8 +64,7 @@ public class DiagnosisUI : MonoBehaviour
         );
     }
 
-    public void SelectDiagnosis(
-        DiagnosisChoice choice)
+    public void SelectDiagnosis(DiagnosisChoice choice)
     {
         if (!ready)
         {
@@ -138,10 +138,10 @@ public class DiagnosisUI : MonoBehaviour
                 diagnosis
             );
 
+        ready = false;
+
         if (correct)
         {
-            ready = false;
-
             Debug.Log(
                 "Diagnosis correct. Completing stage."
             );
@@ -150,8 +150,6 @@ public class DiagnosisUI : MonoBehaviour
         }
         else
         {
-            ready = false;
-
             Debug.Log(
                 "Diagnosis incorrect. Restarting stage."
             );
@@ -168,7 +166,9 @@ public class DiagnosisUI : MonoBehaviour
         for (int i = 0; i < choices.Length; i++)
         {
             if (choices[i] != null)
+            {
                 choices[i].SetSelected(false);
+            }
         }
     }
 }

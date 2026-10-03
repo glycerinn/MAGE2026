@@ -1,10 +1,19 @@
 using UnityEngine;
+using Yarn.Unity;
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
 
-    public GameObject diagnosisScreen;
+    [Header("Yarn Dialogue")]
+    public DialogueRunner dialogueRunner;
+    public string[] stageDialogueNodes =
+    {
+        "Stage1",
+        "Stage2",
+        "Stage3",
+        "Stage4"
+    };
 
     [Header("Minigames")]
     public GameObject[] minigames;
@@ -47,22 +56,80 @@ public class StageManager : MonoBehaviour
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
 
-        if (diagnosisScreen != null)
-            diagnosisScreen.SetActive(false);
-
         StartStage();
     }
 
     void StartStage()
     {
         currentMinigame = 0;
-
         DisableAllMinigames();
-
+        
         if (DiagnosisManager.Instance != null)
             DiagnosisManager.Instance.StartStageDiagnosis(CurrentStage);
 
         Debug.Log("Starting Stage " + CurrentStage);
+        StartStageDialogue();
+    }
+
+    void StartStageDialogue()
+    {
+        if (dialogueRunner == null)
+        {
+            Debug.LogWarning(
+                "No DialogueRunner assigned. Starting minigame immediately."
+            );
+
+            ActivateCurrentMinigame();
+            return;
+        }
+
+        int dialogueIndex = CurrentStage - 1;
+
+        if (dialogueIndex < 0 ||
+            dialogueIndex >= stageDialogueNodes.Length)
+        {
+            Debug.LogWarning(
+                "No dialogue node assigned for Stage " +
+                CurrentStage +
+                ". Starting minigame."
+            );
+
+            ActivateCurrentMinigame();
+            return;
+        }
+
+        string nodeName =
+            stageDialogueNodes[dialogueIndex];
+
+        if (string.IsNullOrEmpty(nodeName))
+        {
+            Debug.LogWarning(
+                "Dialogue node is empty for Stage " +
+                CurrentStage +
+                ". Starting minigame."
+            );
+
+            ActivateCurrentMinigame();
+            return;
+        }
+
+        Debug.Log(
+            "Starting stage dialogue: " +
+            nodeName
+        );
+
+        dialogueRunner.onDialogueComplete.AddListener(
+            OnStageDialogueComplete
+        );
+
+        dialogueRunner.StartDialogue(nodeName);
+    }
+
+    void OnStageDialogueComplete()
+    {
+        dialogueRunner.onDialogueComplete.RemoveListener(OnStageDialogueComplete);
+
+        Debug.Log("Stage " + CurrentStage + " opening dialogue complete.");
 
         ActivateCurrentMinigame();
     }
@@ -109,13 +176,6 @@ public class StageManager : MonoBehaviour
 
         if (minigame.MinigameName != minigameName)
         {
-            Debug.LogWarning(
-                "Wrong minigame completed. Expected: " +
-                minigame.MinigameName +
-                " | Received: " +
-                minigameName
-            );
-
             return;
         }
 
@@ -138,16 +198,10 @@ public class StageManager : MonoBehaviour
 
         if (DiagnosisUI.Instance != null)
             DiagnosisUI.Instance.SetupForStage(CurrentStage);
-
-        if (diagnosisScreen != null)
-            diagnosisScreen.SetActive(true);
     }
 
     public void CompleteDiagnosis()
     {
-        if (diagnosisScreen != null)
-            diagnosisScreen.SetActive(false);
-
         CompleteStage();
     }
 
@@ -169,9 +223,6 @@ public class StageManager : MonoBehaviour
         Debug.Log("WRONG DIAGNOSIS. RESTARTING STAGE " + CurrentStage);
 
         stageComplete = false;
-
-        if (diagnosisScreen != null)
-            diagnosisScreen.SetActive(false);
 
         if (stageCompleteScreen != null)
             stageCompleteScreen.SetActive(false);
