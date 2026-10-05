@@ -1,0 +1,10 @@
+# Made in Blockbench 5.2.1
+newmtl m_0fefccaf-3169-f8b8-7020-55f5b559d52f
+map_Kd pc_texture.png
+newmtl m_713f240d-cf5c-9622-f275-a01ff6e9b50c
+map_Kd cpu_texture.png
+newmtl m_3eb2311d-11b9-2b92-96ad-ac7c8815622d
+map_Kd mouse.png
+newmtl m_0f6d6c50-a5e8-c32e-ca35-5d30a9013521
+map_Kd keyboard_texture.png
+newmtl none
