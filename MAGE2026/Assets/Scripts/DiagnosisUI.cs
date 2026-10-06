@@ -8,7 +8,14 @@ public class DiagnosisUI : MonoBehaviour
     public DiagnosisChoice[] choices;
 
     [Header("Choices Per Stage")]
-    public int[] choicesPerStage = { 3, 5, 6, 6, 6 };
+    public int[] choicesPerStage =
+    {
+        3,
+        5,
+        6,
+        6,
+        6
+    };
 
     private DiagnosisChoice selectedChoice;
     private bool ready;
@@ -29,7 +36,8 @@ public class DiagnosisUI : MonoBehaviour
             stage
         );
 
-        int stageIndex = stage - 1;
+        int stageIndex =
+            stage - 1;
 
         if (stageIndex < 0 ||
             stageIndex >= choicesPerStage.Length)
@@ -64,7 +72,9 @@ public class DiagnosisUI : MonoBehaviour
 
         if (HeadlineClue.Instance != null)
         {
-            HeadlineClue.Instance.ShowForStage(stage);
+            HeadlineClue.Instance.ShowForStage(
+                stage
+            );
         }
 
         ready = true;
@@ -79,7 +89,9 @@ public class DiagnosisUI : MonoBehaviour
     {
         if (!ready)
         {
-            Debug.LogWarning("Diagnosis UI is not ready yet.");
+            Debug.LogWarning(
+                "Diagnosis UI is not ready yet."
+            );
 
             return;
         }
@@ -111,28 +123,38 @@ public class DiagnosisUI : MonoBehaviour
     {
         if (!ready)
         {
-            Debug.LogWarning("Diagnosis UI is not ready yet.");
+            Debug.LogWarning(
+                "Diagnosis UI is not ready yet."
+            );
 
             return;
         }
 
         if (selectedChoice == null)
         {
-            Debug.LogWarning("No diagnosis selected.");
+            Debug.LogWarning(
+                "No diagnosis selected."
+            );
 
             return;
         }
 
         if (DiagnosisManager.Instance == null)
         {
-            Debug.LogError("DiagnosisManager.Instance is null.");
+            Debug.LogError(
+                "DiagnosisManager.Instance is null."
+            );
 
             return;
         }
 
-        string diagnosis = selectedChoice.diagnosis;
+        string diagnosis =
+            selectedChoice.diagnosis;
 
-        Debug.Log("Submitting diagnosis: " + diagnosis);
+        Debug.Log(
+            "Submitting diagnosis: " +
+            diagnosis
+        );
 
         bool correct =
             DiagnosisManager.Instance.SubmitDiagnosis(
@@ -144,20 +166,22 @@ public class DiagnosisUI : MonoBehaviour
         if (correct)
         {
             Debug.Log(
-                "Diagnosis correct. " +
-                "Completing stage."
+                "Diagnosis correct."
             );
 
-            StageManager.Instance.CompleteDiagnosis();
+            StageManager.Instance.CompleteDiagnosis(
+                true
+            );
         }
         else
         {
             Debug.Log(
-                "Diagnosis incorrect. " +
-                "Restarting stage."
+                "Diagnosis incorrect."
             );
 
-            StageManager.Instance.RestartCurrentStage();
+            StageManager.Instance.CompleteDiagnosis(
+                false
+            );
         }
     }
 
@@ -171,14 +195,10 @@ public class DiagnosisUI : MonoBehaviour
             i++)
         {
             if (choices[i] != null)
-            {
                 choices[i].SetSelected(false);
-            }
         }
 
         if (HeadlineClue.Instance != null)
-        {
             HeadlineClue.Instance.Hide();
-        }
     }
 }
