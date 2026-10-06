@@ -2,80 +2,120 @@ using UnityEngine;
 
 public class DesktopCamController : MonoBehaviour
 {
+    [Header("Main Room")]
     public Camera main;
+    public PlayerCamera playerCamera;
+
+    [Header("Minigame Cameras")]
     public Camera[] cams;
 
-    public GameObject desktopbuttons;
+    [Header("Submission")]
     public GameObject checkbutton;
-    public int currentCam;
 
-    bool inDesktop;
+    [Header("Minigame Back Button")]
+    public GameObject backButton;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private int currentCam = -1;
+    private bool inMinigame;
+
     void Start()
     {
-        currentCam = 0;
-        desktopbuttons.SetActive(false);
-        checkbutton.SetActive(true);
+        inMinigame = false;
+        currentCam = -1;
+
+        if (main != null)
+            main.gameObject.SetActive(true);
+
+        if (checkbutton != null)
+            checkbutton.SetActive(true);
+
+        if (backButton != null)
+            backButton.SetActive(false);
 
         for (int i = 0; i < cams.Length; i++)
         {
-            cams[i].gameObject.SetActive(false);
+            if (cams[i] != null)
+                cams[i].gameObject.SetActive(false);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OpenMinigame(int index)
     {
-        if (inDesktop == false && Input.GetKeyDown(KeyCode.E))
+        if (index < 0 || index >= cams.Length)
         {
-            openDesktop();
+            Debug.LogWarning(
+                "Invalid minigame camera index: " +
+                index
+            );
+            return;
         }
-        else if(inDesktop == true && Input.GetKeyDown(KeyCode.E))
-        {   
-            closeDesktop();
-        }
-    }
 
-    public void closeDesktop()
-    {
-        cams[currentCam].gameObject.SetActive(false);
-        main.gameObject.SetActive(true);
-        checkbutton.SetActive(true);
-        desktopbuttons.SetActive(false);
-        inDesktop = false;
-    }
-
-    public void openDesktop()
-    {
-        cams[currentCam].gameObject.SetActive(true);
-        main.gameObject.SetActive(false);
-        checkbutton.SetActive(false);
-        desktopbuttons.SetActive(true);
-        inDesktop = true;
-    }
-
-    public void onNextButtonClick()
-    {
-        cams[currentCam].gameObject.SetActive(false);
-        currentCam++;
-        if (currentCam >= cams.Length)
+        if (cams[index] == null)
         {
-            currentCam = 0;
+            Debug.LogWarning(
+                "Minigame camera at index " +
+                index +
+                " is not assigned."
+            );
+            return;
         }
 
-        cams[currentCam].gameObject.SetActive(true);
+        if (main != null)
+            main.gameObject.SetActive(false);
+
+        for (int i = 0; i < cams.Length; i++)
+        {
+            if (cams[i] != null)
+                cams[i].gameObject.SetActive(false);
+        }
+
+        cams[index].gameObject.SetActive(true);
+
+        currentCam = index;
+        inMinigame = true;
+
+        if (checkbutton != null)
+            checkbutton.SetActive(false);
+
+        if (backButton != null)
+            backButton.SetActive(true);
+
+        Debug.Log(
+            "Opened minigame camera: " +
+            cams[index].name
+        );
     }
 
-    public void onPrevButtonClick()
+    public void BackToMain()
     {
-        cams[currentCam].gameObject.SetActive(false);
-        currentCam--;
-        if(currentCam < 0)
+        for (int i = 0; i < cams.Length; i++)
         {
-            currentCam = cams.Length - 1;
+            if (cams[i] != null)
+                cams[i].gameObject.SetActive(false);
         }
-        
-        cams[currentCam].gameObject.SetActive(true);
+
+        if (main != null)
+            main.gameObject.SetActive(true);
+
+        if (playerCamera != null)
+            playerCamera.ResetCameraRotation();
+
+        currentCam = -1;
+        inMinigame = false;
+
+        if (checkbutton != null)
+            checkbutton.SetActive(true);
+
+        if (backButton != null)
+            backButton.SetActive(false);
+
+        Debug.Log(
+            "Returned to main room and reset camera direction."
+        );
+    }
+
+    public bool IsInMinigame()
+    {
+        return inMinigame;
     }
 }
