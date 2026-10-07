@@ -9,10 +9,13 @@ public class MainMenuManager : MonoBehaviour
     // private AudioManager audioManager;
     private int sceneToContinue;
     public GameObject StageMenu;
+    public GameObject TutorialPrompt;
+    public string TutorialSceneName = "Tutorial";
 
     public void Awake()
     {
         StageMenu.SetActive(false);
+        TutorialPrompt.SetActive(false);
         // GameObject audioObj = GameObject.FindGameObjectWithTag("AudioManager");
 
         // if (audioObj != null)
@@ -25,7 +28,7 @@ public class MainMenuManager : MonoBehaviour
         //     Debug.LogError("AudioManager not found in scene!");
         // }
             
-    } 
+    }
 
     public void Start()
     {
@@ -37,6 +40,17 @@ public class MainMenuManager : MonoBehaviour
     {
         // StartCoroutine(levelLoader.PlayTutorialTransition());
         // audioManager.playButtonSFX();
+        TutorialPrompt.SetActive(true);
+    }
+
+    public void TutorialYes()
+    {
+        SceneManager.LoadScene(TutorialSceneName);
+    }
+
+    public void TutorialNo()
+    {
+        TutorialPrompt.SetActive(false);
         StageMenu.SetActive(true);
     }
 
@@ -44,7 +58,6 @@ public class MainMenuManager : MonoBehaviour
     {
         StageMenu.SetActive(false);
     }
-
 
     public void QuitGame()
     {

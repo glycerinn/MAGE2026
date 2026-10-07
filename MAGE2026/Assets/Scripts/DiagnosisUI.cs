@@ -77,6 +77,13 @@ public class DiagnosisUI : MonoBehaviour
             );
         }
 
+        if (DiagnosisGuide.Instance != null)
+        {
+            DiagnosisGuide.Instance.SetupForStage(
+                stage
+            );
+        }
+
         ready = true;
 
         Debug.Log(
@@ -200,5 +207,8 @@ public class DiagnosisUI : MonoBehaviour
 
         if (HeadlineClue.Instance != null)
             HeadlineClue.Instance.Hide();
+
+        if (DiagnosisGuide.Instance != null)
+            DiagnosisGuide.Instance.ResetGuide();
     }
 }
