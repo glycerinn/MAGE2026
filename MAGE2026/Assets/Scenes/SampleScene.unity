@@ -6379,7 +6379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesktopCamController
   main: {fileID: 330585545}
-  playerCamera: {fileID: 1212840520}
+  playerCamera: {fileID: 0}
   cams:
   - {fileID: 1212896909}
   - {fileID: 1543874164}
@@ -6387,7 +6387,7 @@ MonoBehaviour:
   - {fileID: 558401078}
   - {fileID: 1897452120}
   checkbutton: {fileID: 1849933737}
-  backButton: {fileID: 1463901065}
+  backButton: {fileID: 0}
 --- !u!4 &718484396
 Transform:
   m_ObjectHideFlags: 0
@@ -15705,11 +15705,11 @@ MonoBehaviour:
   - {fileID: 801700571}
   - {fileID: 558401078}
   stageCompleteScreen: {fileID: 888625253}
-  stageCompleteText: {fileID: 415235795}
-  nextStageButton: {fileID: 442462441}
-  retryButton: {fileID: 1414993686}
-  stageAnimation: {fileID: 888625255}
-  dialogueRunner: {fileID: 1440774503828025624}
+  stageCompleteText: {fileID: 0}
+  nextStageButton: {fileID: 0}
+  retryButton: {fileID: 0}
+  stageAnimation: {fileID: 0}
+  dialogueRunner: {fileID: 0}
   stageDialogueNodes:
   - Stage1
   - Stage2
