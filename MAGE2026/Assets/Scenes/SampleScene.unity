@@ -6379,15 +6379,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DesktopCamController
   main: {fileID: 330585545}
+  playerCamera: {fileID: 0}
   cams:
   - {fileID: 1212896909}
   - {fileID: 1543874164}
   - {fileID: 801700571}
   - {fileID: 558401078}
   - {fileID: 1897452120}
-  desktopbuttons: {fileID: 0}
   checkbutton: {fileID: 1849933737}
-  currentCam: 0
+  backButton: {fileID: 0}
 --- !u!4 &718484396
 Transform:
   m_ObjectHideFlags: 0
@@ -13660,7 +13660,6 @@ MonoBehaviour:
   - {fileID: 1146223425}
   allowedValues: 230000003200000050000000
   cluePopup: {fileID: 1398916155}
-  winAmount: 3
 --- !u!1 &1739118332
 GameObject:
   m_ObjectHideFlags: 0
@@ -15694,7 +15693,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3759ada98fba0e49a8e5d350c83e041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageManager
-  diagnosisScreen: {fileID: 0}
   minigames:
   - {fileID: 1789082857}
   - {fileID: 717209398}
@@ -15707,6 +15705,17 @@ MonoBehaviour:
   - {fileID: 801700571}
   - {fileID: 558401078}
   stageCompleteScreen: {fileID: 888625253}
+  stageCompleteText: {fileID: 0}
+  nextStageButton: {fileID: 0}
+  retryButton: {fileID: 0}
+  stageAnimation: {fileID: 0}
+  dialogueRunner: {fileID: 0}
+  stageDialogueNodes:
+  - Stage1
+  - Stage2
+  - Stage3
+  - Stage4
+  - Stage5
 --- !u!4 &2009242655
 Transform:
   m_ObjectHideFlags: 0
