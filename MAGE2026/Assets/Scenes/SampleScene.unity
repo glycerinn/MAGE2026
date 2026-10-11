@@ -2801,6 +2801,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &330181644
 GameObject:
   m_ObjectHideFlags: 0
@@ -3939,6 +3941,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &442462441
 GameObject:
   m_ObjectHideFlags: 0
@@ -4126,6 +4130,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &484885812
 GameObject:
   m_ObjectHideFlags: 0
@@ -5972,6 +5978,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &675711739
 GameObject:
   m_ObjectHideFlags: 0
@@ -7464,7 +7472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &888625254
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9425,6 +9433,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &1155726874
 GameObject:
   m_ObjectHideFlags: 0
@@ -11365,6 +11375,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &1396418234
 GameObject:
   m_ObjectHideFlags: 0
@@ -14134,6 +14146,7 @@ MonoBehaviour:
   - {fileID: 1394290816}
   - {fileID: 1146223425}
   allowedValues: 230000003200000050000000
+  loadingDuration: 1
   cluePopup: {fileID: 1398916155}
 --- !u!1 &1739118332
 GameObject:
@@ -14391,6 +14404,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &1753811203
 GameObject:
   m_ObjectHideFlags: 0
@@ -14734,6 +14749,8 @@ MonoBehaviour:
   rightX: 0.12
   minValue: 0
   maxValue: 300
+  shakeDistance: 0.1
+  shakeSpeed: 10
 --- !u!1 &1789082857
 GameObject:
   m_ObjectHideFlags: 0
@@ -16256,11 +16273,11 @@ MonoBehaviour:
   - {fileID: 801700571}
   - {fileID: 558401078}
   stageCompleteScreen: {fileID: 888625253}
-  stageCompleteText: {fileID: 0}
-  nextStageButton: {fileID: 0}
-  retryButton: {fileID: 0}
-  stageAnimation: {fileID: 0}
-  dialogueRunner: {fileID: 0}
+  stageCompleteText: {fileID: 415235795}
+  nextStageButton: {fileID: 442462441}
+  retryButton: {fileID: 1414993686}
+  stageAnimation: {fileID: 888625255}
+  dialogueRunner: {fileID: 1440774503828025624}
   stageDialogueNodes:
   - Stage1
   - Stage2
