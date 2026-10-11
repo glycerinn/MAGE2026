@@ -739,6 +739,40 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &65232440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 65232441}
+  m_Layer: 0
+  m_Name: Coffe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &65232441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65232440}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5534504140756281835}
+  - {fileID: 7734800953264814235}
+  - {fileID: 209108806776671002}
+  m_Father: {fileID: 2877746784641651181}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &71504879
 GameObject:
   m_ObjectHideFlags: 0
@@ -17776,22 +17810,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &134267705303310584
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 763029633298430530}
-  m_Layer: 0
-  m_Name: CoffeeCup
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &209108806776671002
 Transform:
   m_ObjectHideFlags: 0
@@ -17800,12 +17818,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8957879717773072417}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.870001, y: 2, z: -0.86000055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 763029633298430530}
+  m_Father: {fileID: 65232441}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &316402545325357413
 GameObject:
@@ -17896,22 +17914,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6802614891044903640}
   m_Mesh: {fileID: -2432090755550338912, guid: 81d2be99ec07e8b498cd65b18fddc7e1, type: 3}
---- !u!4 &763029633298430530
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134267705303310584}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.50515765, z: -0, w: 0.8630271}
-  m_LocalPosition: {x: 1.3293607, y: 0, z: 0.28774935}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 209108806776671002}
-  m_Father: {fileID: 7144886380483480003}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &913934583493482348
 GameObject:
   m_ObjectHideFlags: 0
@@ -18445,8 +18447,10 @@ GameObject:
   - component: {fileID: 7734800953264814235}
   - component: {fileID: 4864071353987334609}
   - component: {fileID: 8261040982522504517}
+  - component: {fileID: 8261040982522504519}
+  - component: {fileID: 8261040982522504518}
   m_Layer: 0
-  m_Name: default
+  m_Name: CoffeeMug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18752,8 +18756,7 @@ Transform:
   - {fileID: 146207701}
   - {fileID: 49292376}
   - {fileID: 8820557042214368527}
-  - {fileID: 5534504140756281835}
-  - {fileID: 7144886380483480003}
+  - {fileID: 65232441}
   - {fileID: 7713190388871268494}
   m_Father: {fileID: 183615348}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -19906,14 +19909,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5153616187137241937}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.76442343, z: -0, w: 0.6447146}
-  m_LocalPosition: {x: -0.42, y: 2, z: -3.72}
+  m_LocalRotation: {x: -0, y: 0.7644234, z: -0, w: 0.64471465}
+  m_LocalPosition: {x: -0.4200001, y: 2, z: -3.7200007}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4953596767699065011}
   - {fileID: 8224059777482008084}
-  m_Father: {fileID: 2877746784641651181}
+  m_Father: {fileID: 65232441}
   m_LocalEulerAnglesHint: {x: 0, y: 99.711, z: 0}
 --- !u!114 &5721283345024641945
 MonoBehaviour:
@@ -20294,23 +20297,6 @@ Transform:
   - {fileID: 7628467788407064360}
   m_Father: {fileID: 2003141490}
   m_LocalEulerAnglesHint: {x: 0, y: 167.23, z: 0}
---- !u!4 &7144886380483480003
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7524508796816642937}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.50515765, z: -0, w: 0.8630271}
-  m_LocalPosition: {x: -2.27, y: 1.9999995, z: -2.16}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7734800953264814235}
-  - {fileID: 763029633298430530}
-  m_Father: {fileID: 2877746784641651181}
-  m_LocalEulerAnglesHint: {x: 0, y: -60.684, z: 0}
 --- !u!4 &7168312204212320726
 Transform:
   m_ObjectHideFlags: 0
@@ -20375,22 +20361,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &7524508796816642937
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7144886380483480003}
-  m_Layer: 0
-  m_Name: CoffeeMug
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &7628467788407064360
 Transform:
   m_ObjectHideFlags: 0
@@ -20464,12 +20434,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576724972098661280}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.50515765, z: -0, w: 0.8630271}
+  m_LocalPosition: {x: -2.2700005, y: 2, z: -2.1600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7144886380483480003}
+  m_Father: {fileID: 65232441}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &7776107603692476809
 MeshRenderer:
@@ -20673,6 +20643,42 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8261040982522504518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576724972098661280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5fda0cb9dc924ba49a4314bb39492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickRotation
+  rotationAmount: {x: 5, y: 0, z: 0}
+  duration: 0.2
+  ease: 3
+--- !u!65 &8261040982522504519
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576724972098661280}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2720188, y: 0.3592625, z: 0.42021698}
+  m_Center: {x: -0.0000004375828, y: 0.17963125, z: -1.3171577}
 --- !u!114 &8520010008450977730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20800,13 +20806,51 @@ GameObject:
   - component: {fileID: 209108806776671002}
   - component: {fileID: 3040431152762876496}
   - component: {fileID: 1951310051978598084}
+  - component: {fileID: 8957879717773072419}
+  - component: {fileID: 8957879717773072418}
   m_Layer: 0
-  m_Name: default
+  m_Name: CoffeeCup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &8957879717773072418
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8957879717773072417}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.29197755, y: 0.38472, z: 0.29197747}
+  m_Center: {x: -0.00000023841858, y: 0.19236, z: -2.0883157}
+--- !u!114 &8957879717773072419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8957879717773072417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5fda0cb9dc924ba49a4314bb39492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickRotation
+  rotationAmount: {x: 5, y: 0, z: 0}
+  duration: 0.2
+  ease: 3
 --- !u!33 &9028370195793783083
 MeshFilter:
   m_ObjectHideFlags: 0
