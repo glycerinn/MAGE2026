@@ -135,10 +135,10 @@ TextureImporter:
       name: Clouds_1
       rect:
         serializedVersion: 2
-        x: 112
-        y: 99
-        width: 78
-        height: 34
+        x: 120
+        y: 104
+        width: 70
+        height: 29
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
