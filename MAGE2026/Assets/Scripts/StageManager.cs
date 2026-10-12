@@ -33,6 +33,9 @@ public class StageManager : MonoBehaviour
         "Stage5"
     };
 
+    [Header("Dialogue Character")]
+    public DialogueBob dialogueCharacter;
+
     private int currentStage;
     private bool[] minigameCompleted;
     private bool stageComplete;
@@ -157,9 +160,15 @@ public class StageManager : MonoBehaviour
             nodeName
         );
 
+        dialogueRunner.onDialogueComplete.RemoveListener(
+            OnStageDialogueComplete
+        );
         dialogueRunner.onDialogueComplete.AddListener(
             OnStageDialogueComplete
         );
+
+        if (dialogueCharacter != null)
+            dialogueCharacter.Show();
 
         dialogueRunner.StartDialogue(nodeName);
     }
@@ -169,6 +178,9 @@ public class StageManager : MonoBehaviour
         dialogueRunner.onDialogueComplete.RemoveListener(
             OnStageDialogueComplete
         );
+
+        if (dialogueCharacter != null)
+        dialogueCharacter.Hide();
 
         Debug.Log(
             "Stage " +
