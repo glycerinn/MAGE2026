@@ -36,11 +36,9 @@ public class DiagnosisUI : MonoBehaviour
             stage
         );
 
-        int stageIndex =
-            stage - 1;
+        int stageIndex = stage - 1;
 
-        if (stageIndex < 0 ||
-            stageIndex >= choicesPerStage.Length)
+        if (stageIndex < 0 || stageIndex >= choicesPerStage.Length)
         {
             Debug.LogError(
                 "Invalid diagnosis stage: " +
@@ -50,38 +48,28 @@ public class DiagnosisUI : MonoBehaviour
             return;
         }
 
-        int activeChoiceCount =
-            choicesPerStage[stageIndex];
+        int activeChoiceCount = choicesPerStage[stageIndex];
 
-        for (int i = 0;
-            i < choices.Length;
-            i++)
+        for (int i = 0; i < choices.Length; i++)
         {
             if (choices[i] == null)
                 continue;
 
             choices[i].SetSelected(false);
 
-            bool shouldBeActive =
-                i < activeChoiceCount;
+            bool shouldBeActive = i < activeChoiceCount;
 
-            choices[i].SetAvailable(
-                shouldBeActive
-            );
+            choices[i].SetAvailable(shouldBeActive);
         }
 
         if (HeadlineClue.Instance != null)
         {
-            HeadlineClue.Instance.ShowForStage(
-                stage
-            );
+            HeadlineClue.Instance.ShowForStage(stage);
         }
 
         if (DiagnosisGuide.Instance != null)
         {
-            DiagnosisGuide.Instance.SetupForStage(
-                stage
-            );
+            DiagnosisGuide.Instance.SetupForStage(stage);
         }
 
         ready = true;
@@ -108,15 +96,11 @@ public class DiagnosisUI : MonoBehaviour
 
         selectedChoice = choice;
 
-        for (int i = 0;
-            i < choices.Length;
-            i++)
+        for (int i = 0; i < choices.Length; i++)
         {
             if (choices[i] != null)
             {
-                choices[i].SetSelected(
-                    choices[i] == selectedChoice
-                );
+                choices[i].SetSelected(choices[i] == selectedChoice);
             }
         }
 
@@ -155,8 +139,7 @@ public class DiagnosisUI : MonoBehaviour
             return;
         }
 
-        string diagnosis =
-            selectedChoice.diagnosis;
+        string diagnosis = selectedChoice.diagnosis;
 
         Debug.Log(
             "Submitting diagnosis: " +

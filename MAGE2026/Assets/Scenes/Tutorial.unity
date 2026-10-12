@@ -479,8 +479,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 64098a2530bc5c649b940c3d45aff37f, type: 2}
+  m_sharedMaterial: {fileID: -6598996759849871577, guid: 64098a2530bc5c649b940c3d45aff37f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1067,11 +1067,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
   pages:
   - image: {fileID: 1673111108, guid: eda8d8225ba1351469e0701d2ec5e399, type: 3}
-    text: tutorial test 1
+    text: Complete the tasks on each monitor.
   - image: {fileID: -1905674324, guid: 2ed8df78705d04e48b100818cb1d1198, type: 3}
-    text: speed pic
+    text: Match the clues with the guide
   - image: {fileID: 1973811979, guid: 8154e7625743bfb4698630675fbe8640, type: 3}
-    text: another one
+    text: Make the right call
   tutorialImage: {fileID: 459472379}
   tutorialText: {fileID: 504048515}
   previousButton: {fileID: 1078114445}
