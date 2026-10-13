@@ -16612,6 +16612,7 @@ MonoBehaviour:
   - Stage4
   - Stage5
   dialogueCharacter: {fileID: 1316744347}
+  playerCamera: {fileID: 1212840520}
   dialogueInputBlocker: {fileID: 1844450477}
   diagnosisBlocker: {fileID: 470599092}
 --- !u!4 &2009242655

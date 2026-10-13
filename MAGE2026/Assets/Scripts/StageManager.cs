@@ -36,6 +36,9 @@ public class StageManager : MonoBehaviour
     [Header("Dialogue Character")]
     public DialogueBob dialogueCharacter;
 
+    [Header("Player Camera")]
+    public PlayerCamera playerCamera;
+
     [Header("Dialogue Input Blocker")]
     public GameObject dialogueInputBlocker;
 
@@ -153,12 +156,18 @@ public class StageManager : MonoBehaviour
         if (dialogueCharacter != null)
             dialogueCharacter.Show();
 
+        if (playerCamera != null)
+        playerCamera.SetCameraLook(false);
+
         dialogueRunner.StartDialogue(nodeName);
     }
 
     void OnStageDialogueComplete()
     {
         dialogueRunner.onDialogueComplete.RemoveListener(OnStageDialogueComplete);
+
+        if (playerCamera != null)
+        playerCamera.SetCameraLook(true);
 
         if (dialogueCharacter != null)
             dialogueCharacter.Hide();
