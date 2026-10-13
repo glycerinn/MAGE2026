@@ -5055,6 +5055,7 @@ GameObject:
   - component: {fileID: 558401077}
   - component: {fileID: 558401076}
   - component: {fileID: 558401079}
+  - component: {fileID: 558401080}
   m_Layer: 0
   m_Name: Camera4
   m_TagString: Untagged
@@ -5194,6 +5195,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchController
   <Intensity>k__BackingField: 0.427
   _shader: {fileID: 4800000, guid: c14e70ca31deb4b3dbecc8376c965e0c, type: 3}
+--- !u!114 &558401080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558401074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f257536fb697724cb4cedd3852dfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchTransition
+  glitchController: {fileID: 558401079}
+  duration: 0.3
 --- !u!1 &558618943
 GameObject:
   m_ObjectHideFlags: 0
@@ -7084,11 +7099,11 @@ MonoBehaviour:
   - {fileID: 1897452120}
   backButton: {fileID: 1463901065}
   cameraGlitches:
-  - {fileID: 1212896911}
-  - {fileID: 1543874165}
-  - {fileID: 801700572}
-  - {fileID: 558401079}
-  - {fileID: 1897452125}
+  - {fileID: 1212896912}
+  - {fileID: 1543874166}
+  - {fileID: 801700573}
+  - {fileID: 558401080}
+  - {fileID: 1897452126}
 --- !u!4 &718484396
 Transform:
   m_ObjectHideFlags: 0
@@ -7409,6 +7424,7 @@ GameObject:
   - component: {fileID: 801700570}
   - component: {fileID: 801700569}
   - component: {fileID: 801700572}
+  - component: {fileID: 801700573}
   m_Layer: 0
   m_Name: Camera3
   m_TagString: Untagged
@@ -7548,6 +7564,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchController
   <Intensity>k__BackingField: 0.427
   _shader: {fileID: 4800000, guid: c14e70ca31deb4b3dbecc8376c965e0c, type: 3}
+--- !u!114 &801700573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801700567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f257536fb697724cb4cedd3852dfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchTransition
+  glitchController: {fileID: 801700572}
+  duration: 0.3
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -10529,6 +10559,7 @@ GameObject:
   - component: {fileID: 1212896908}
   - component: {fileID: 1212896907}
   - component: {fileID: 1212896911}
+  - component: {fileID: 1212896912}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -10668,6 +10699,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchController
   <Intensity>k__BackingField: 0.427
   _shader: {fileID: 4800000, guid: c14e70ca31deb4b3dbecc8376c965e0c, type: 3}
+--- !u!114 &1212896912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212896906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f257536fb697724cb4cedd3852dfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchTransition
+  glitchController: {fileID: 1212896911}
+  duration: 0.3
 --- !u!1 &1219121513
 GameObject:
   m_ObjectHideFlags: 0
@@ -14036,6 +14081,7 @@ GameObject:
   - component: {fileID: 1543874163}
   - component: {fileID: 1543874162}
   - component: {fileID: 1543874165}
+  - component: {fileID: 1543874166}
   m_Layer: 0
   m_Name: Camera2
   m_TagString: Untagged
@@ -14175,6 +14221,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchController
   <Intensity>k__BackingField: 0.427
   _shader: {fileID: 4800000, guid: c14e70ca31deb4b3dbecc8376c965e0c, type: 3}
+--- !u!114 &1543874166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543874160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f257536fb697724cb4cedd3852dfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchTransition
+  glitchController: {fileID: 1543874165}
+  duration: 0.3
 --- !u!1 &1559765321
 GameObject:
   m_ObjectHideFlags: 0
@@ -15989,6 +16049,7 @@ GameObject:
   - component: {fileID: 1897452121}
   - component: {fileID: 1897452124}
   - component: {fileID: 1897452125}
+  - component: {fileID: 1897452126}
   m_Layer: 0
   m_Name: Camera5
   m_TagString: Untagged
@@ -16128,6 +16189,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchController
   <Intensity>k__BackingField: 0.427
   _shader: {fileID: 4800000, guid: c14e70ca31deb4b3dbecc8376c965e0c, type: 3}
+--- !u!114 &1897452126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897452119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f257536fb697724cb4cedd3852dfdfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchTransition
+  glitchController: {fileID: 1897452125}
+  duration: 0.3
 --- !u!1 &1911427830
 GameObject:
   m_ObjectHideFlags: 0

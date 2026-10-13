@@ -12,8 +12,7 @@ public class DesktopCamController : MonoBehaviour
     [Header("Minigame Back Button")]
     public GameObject backButton;
 
-    [Header("Minigame Glitch Effects")]
-    public KinoGlitch.DigitalGlitchController[] cameraGlitches;
+    public GlitchTransition[] cameraGlitches;
 
     private int currentCam = -1;
     private bool inMinigame;
@@ -68,9 +67,11 @@ public class DesktopCamController : MonoBehaviour
 
         cams[index].gameObject.SetActive(true);
 
-        if (cameraGlitches != null && index < cameraGlitches.Length && cameraGlitches[index] != null)
+        if (cameraGlitches != null &&
+            index < cameraGlitches.Length &&
+            cameraGlitches[index] != null)
         {
-            cameraGlitches[index].PlayGlitchTransition(0.3f);
+            cameraGlitches[index].PlayGlitchTransition();
         }
 
         currentCam = index;
