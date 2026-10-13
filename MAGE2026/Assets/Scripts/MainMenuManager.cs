@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,13 +10,13 @@ public class MainMenuManager : MonoBehaviour
     // private AudioManager audioManager;
     private int sceneToContinue;
     public GameObject StageMenu;
-    public GameObject TutorialPrompt;
+    public TutorialPopUp TutorialPrompt;
+    public TutorialPopUp StageMenuPopup;
     public string TutorialSceneName = "Tutorial";
 
     public void Awake()
     {
         StageMenu.SetActive(false);
-        TutorialPrompt.SetActive(false);
         // GameObject audioObj = GameObject.FindGameObjectWithTag("AudioManager");
 
         // if (audioObj != null)
@@ -40,7 +41,7 @@ public class MainMenuManager : MonoBehaviour
     {
         // StartCoroutine(levelLoader.PlayTutorialTransition());
         // audioManager.playButtonSFX();
-        TutorialPrompt.SetActive(true);
+        TutorialPrompt.ShowPopUp();
     }
 
     public void TutorialYes()
@@ -50,13 +51,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void TutorialNo()
     {
-        TutorialPrompt.SetActive(false);
-        StageMenu.SetActive(true);
+        TutorialPrompt.HidePopUp();
+        StageMenuPopup.ShowPopUp();
     }
 
     public void Back()
     {
-        StageMenu.SetActive(false);
+        StageMenuPopup.HidePopUp();
     }
 
     public void QuitGame()

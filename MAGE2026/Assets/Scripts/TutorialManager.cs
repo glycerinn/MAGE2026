@@ -1,7 +1,9 @@
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -25,10 +27,17 @@ public class TutorialManager : MonoBehaviour
     public GameObject nextButton;
     public GameObject continueButton;
 
+    [Header("Slide Animation")]
+    public float slideDistance = 600f;
+    public float slideDuration = 0.25f;
+
     [Header("Game Scene")]
     public string gameSceneName = "SampleScene";
 
     private int currentPage;
+    private RectTransform imageRect;
+    private Vector2 imageStartPosition;
+    private bool isAnimating;
 
     void Start()
     {
@@ -36,10 +45,14 @@ public class TutorialManager : MonoBehaviour
 
         if (pages == null || pages.Length == 0)
         {
-            Debug.LogError(
-                "TutorialManager: No tutorial pages assigned."
-            );
+            Debug.LogError("TutorialManager: No tutorial pages assigned.");
             return;
+        }
+
+        if (tutorialImage != null)
+        {
+            imageRect = tutorialImage.rectTransform;
+            imageStartPosition = imageRect.anchoredPosition;
         }
 
         ShowPage();
@@ -47,92 +60,85 @@ public class TutorialManager : MonoBehaviour
 
     public void NextPage()
     {
-        if (pages == null || pages.Length == 0)
-            return;
-
-        if (currentPage >= pages.Length - 1)
+        if (isAnimating || pages == null || currentPage >= pages.Length - 1)
             return;
 
         currentPage++;
-
-        ShowPage();
+        ShowPage(-1);
     }
 
     public void PreviousPage()
     {
-        if (pages == null || pages.Length == 0)
-            return;
-
-        if (currentPage <= 0)
+        if (isAnimating || pages == null || currentPage <= 0)
             return;
 
         currentPage--;
-
-        ShowPage();
+        ShowPage(1);
     }
 
-    void ShowPage()
+    void ShowPage(int slideDirection = 0)
     {
-        TutorialPage page =
-            pages[currentPage];
+        TutorialPage page = pages[currentPage];
 
         if (tutorialImage != null)
         {
-            tutorialImage.sprite =
-                page.image;
+            if (slideDirection == 0 || imageRect == null)
+                tutorialImage.sprite = page.image;
+            else
+                AnimateImage(page.image, slideDirection);
         }
 
         if (tutorialText != null)
-        {
-            tutorialText.text =
-                page.text;
-        }
+            tutorialText.text = page.text;
 
         UpdateButtons();
     }
 
+    void AnimateImage(Sprite newSprite, int direction)
+    {
+        isAnimating = true;
+
+        Vector2 center = imageStartPosition;
+        Vector2 exitPosition = center + Vector2.right * direction * slideDistance;
+        Vector2 enterPosition = center - Vector2.right * direction * slideDistance;
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(imageRect.DOAnchorPos(exitPosition, slideDuration).SetEase(Ease.InCubic));
+        sequence.AppendCallback(() =>
+        {
+            tutorialImage.sprite = newSprite;
+            imageRect.anchoredPosition = enterPosition;
+        });
+        sequence.Append(imageRect.DOAnchorPos(center, slideDuration).SetEase(Ease.OutCubic));
+        sequence.OnComplete(() =>
+        {
+            isAnimating = false;
+        });
+    }
+
     void UpdateButtons()
     {
-        bool isFirstPage =
-            currentPage == 0;
-
-        bool isLastPage =
-            currentPage == pages.Length - 1;
+        bool isFirstPage = currentPage == 0;
+        bool isLastPage = currentPage == pages.Length - 1;
 
         if (previousButton != null)
-        {
-            previousButton.SetActive(
-                !isFirstPage
-            );
-        }
+            previousButton.SetActive(!isFirstPage);
 
         if (nextButton != null)
-        {
-            nextButton.SetActive(
-                !isLastPage
-            );
-        }
+            nextButton.SetActive(!isLastPage);
 
         if (continueButton != null)
-        {
-            continueButton.SetActive(
-                isLastPage
-            );
-        }
+            continueButton.SetActive(isLastPage);
     }
 
     public void ContinueToGame()
     {
         if (string.IsNullOrEmpty(gameSceneName))
         {
-            Debug.LogError(
-                "TutorialManager: Game scene name is empty."
-            );
+            Debug.LogError("TutorialManager: Game scene name is empty.");
             return;
         }
 
-        SceneManager.LoadScene(
-            gameSceneName
-        );
+        SceneManager.LoadScene(gameSceneName);
     }
 }

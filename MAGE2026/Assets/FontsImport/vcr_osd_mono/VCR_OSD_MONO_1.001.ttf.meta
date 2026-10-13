@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ebee4217471c7a747a610eeb4a56f057
+guid: 4c30d92d5bf8bbb48a5ac79d1b9ca18d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Tomorrow
+  - VCR OSD Mono
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

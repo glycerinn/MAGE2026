@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    public GameObject crosshair;
     public float mouseSensitivity = 500f;
     public float topClamp = -90f;
     public float bottomClamp = 90f;
@@ -41,6 +42,8 @@ public class PlayerCamera : MonoBehaviour
         interactionMode = enabled;
         Cursor.lockState = enabled ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = enabled;
+        if (crosshair != null)
+            crosshair.SetActive(!enabled);
     }
 
     public void SetCameraLook(bool enabled)
