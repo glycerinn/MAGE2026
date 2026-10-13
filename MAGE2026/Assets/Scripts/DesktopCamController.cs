@@ -12,6 +12,9 @@ public class DesktopCamController : MonoBehaviour
     [Header("Minigame Back Button")]
     public GameObject backButton;
 
+    [Header("Monitor Button Interaction")]
+    public CanvasGroup monitorButtonsGroup;
+
     public GlitchTransition[] cameraGlitches;
 
     private int currentCam = -1;
@@ -44,6 +47,12 @@ public class DesktopCamController : MonoBehaviour
                 index
             );
             return;
+        }
+
+        if (monitorButtonsGroup != null)
+        {
+            monitorButtonsGroup.interactable = false;
+            monitorButtonsGroup.blocksRaycasts = false;
         }
 
         if (cams[index] == null)
@@ -92,6 +101,12 @@ public class DesktopCamController : MonoBehaviour
         {
             if (cams[i] != null)
                 cams[i].gameObject.SetActive(false);
+        }
+
+        if (monitorButtonsGroup != null)
+        {
+            monitorButtonsGroup.interactable = true;
+            monitorButtonsGroup.blocksRaycasts = true;
         }
 
         if (main != null)
