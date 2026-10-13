@@ -27,8 +27,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: 8720717692344282639}
-  - {fileID: 6851664371654099171}
-  m_RendererFeatureMap: ad6b866f10d7b46c0f2ea56e89360679e380a4c07100165f
+  - {fileID: 772676936842065308}
+  m_RendererFeatureMap: ad6b866f10d7b46c0f2ea56e893606799cb59b8a9419b90a
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -57,6 +57,34 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &772676936842065308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38fee1e350c0419ab0131008ca74048, type: 3}
+  m_Name: DigitalGlitchRendererFeature
+  m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchRendererFeature
+  m_Active: 1
+  _passEvent: 600
+--- !u!114 &4321662906612962419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c58975dd08e7c84099691ef0a0b83c9, type: 3}
+  m_Name: DigitalGlitchRendererFeature
+  m_EditorClassIdentifier: KinoGlitch.Runtime::KinoGlitch.DigitalGlitchRendererFeature
+  m_Active: 1
+  _passEvent: 600
 --- !u!114 &6851664371654099171
 MonoBehaviour:
   m_ObjectHideFlags: 0

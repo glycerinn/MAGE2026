@@ -32,6 +32,7 @@ public class StageManager : MonoBehaviour
         "Stage4",
         "Stage5"
     };
+    public GameObject skipDialogueButton;
 
     [Header("Dialogue Character")]
     public DialogueBob dialogueCharacter;
@@ -125,8 +126,10 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        int dialogueIndex =
-            CurrentStage - 1;
+        if (skipDialogueButton != null)
+            skipDialogueButton.SetActive(true);
+
+        int dialogueIndex = CurrentStage - 1;
 
         if (dialogueIndex < 0 || dialogueIndex >= stageDialogueNodes.Length)
         {
@@ -167,7 +170,10 @@ public class StageManager : MonoBehaviour
         dialogueRunner.onDialogueComplete.RemoveListener(OnStageDialogueComplete);
 
         if (playerCamera != null)
-        playerCamera.SetCameraLook(true);
+            playerCamera.SetCameraLook(true);
+
+        if (skipDialogueButton != null)
+            skipDialogueButton.SetActive(false);
 
         if (dialogueCharacter != null)
             dialogueCharacter.Hide();
@@ -178,6 +184,19 @@ public class StageManager : MonoBehaviour
         Debug.Log("Stage " + CurrentStage + " opening dialogue complete.");
 
         ActivateAllMinigames();
+    }
+
+    public void SkipDialogue()
+    {
+        if (dialogueRunner == null || !dialogueRunner.IsDialogueRunning)
+            return;
+
+        if (skipDialogueButton != null)
+            skipDialogueButton.SetActive(false);
+
+        dialogueRunner.onDialogueComplete.RemoveListener(OnStageDialogueComplete);
+        dialogueRunner.Stop();
+        OnStageDialogueComplete();
     }
 
     void ActivateAllMinigames()
