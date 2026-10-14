@@ -50,7 +50,7 @@ MonoBehaviour:
     - source: Satellite
       value: Very Cloudy
     - source: Humidity
-      value: 80%
+      value: 85%
     - source: Rainfall
       value: 100 mm
   - diagnosis: Landslide
@@ -60,7 +60,7 @@ MonoBehaviour:
     - source: Satellite
       value: Very Cloudy
     - source: Humidity
-      value: 80%
+      value: 85%
     - source: Rainfall
       value: 100 mm
   - diagnosis: Drought

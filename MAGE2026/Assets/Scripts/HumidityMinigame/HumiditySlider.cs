@@ -5,48 +5,63 @@ using DG.Tweening;
 
 public class HumiditySlider : MonoBehaviour
 {
-    [Header("Handle")]
-    public Transform handle;
+    [Header("Fill")]
+    public Transform fill;
 
     [Header("Percentage Text")]
     public TMP_Text percentageText;
 
-    [Header("Slider Range")]
-    public float leftX = -2f;
-    public float rightX = 2f;
-
     [Header("Value Range")]
     public float minValue = 0f;
     public float maxValue = 300f;
-
     public int Value { get; private set; }
     public bool IsLocked { get; private set; }
     public bool IsLoading { get; private set; }
 
-    [Header("Loading Shake")]
+    [Header("Fill Padding")]
+    public float leftPadding = 0.005f;
+    public float rightPadding = 0.005f;
+    private float originalFillWidth;
+
+    [Header("Loading Animation")]
     public float shakeDistance = 0.1f;
     public float shakeSpeed = 5f;
-
-    private Vector3 originalPosition;
-    private Tween shakeTween;
+    private Vector3 originalFillScale;
+    private Vector3 originalFillPosition;
+    private Tween fillTween;
     private Tween delayTween;
-
     private HumidityMinigame minigame;
 
     void Awake()
     {
         minigame = GetComponentInParent<HumidityMinigame>();
-        originalPosition = transform.localPosition;
+        if (fill != null)
+        {
+            originalFillScale = fill.localScale;
+            originalFillPosition = fill.localPosition;
+            originalFillWidth = originalFillScale.x;
+        }
     }
 
     public void SetValue(int value)
     {
         Value = Mathf.Clamp(value, (int)minValue, (int)maxValue);
         float normalized = Mathf.InverseLerp(minValue, maxValue, Value);
-        float x = Mathf.Lerp(leftX, rightX, normalized);
-        Vector3 position = handle.localPosition;
-        position.x = x;
-        handle.localPosition = position;
+
+        if (fill != null)
+        {
+            float usableWidth = Mathf.Max(0f, originalFillWidth - leftPadding - rightPadding);
+            float fillWidth = usableWidth * normalized;
+
+            Vector3 scale = originalFillScale;
+            scale.x = fillWidth;
+            fill.localScale = scale;
+
+            Vector3 position = originalFillPosition;
+            position.x = originalFillPosition.x - originalFillWidth / 2f + leftPadding + fillWidth / 2f;
+            fill.localPosition = position;
+        }
+
         if (percentageText != null)
             percentageText.text = Value + "%";
     }
@@ -63,43 +78,45 @@ public class HumiditySlider : MonoBehaviour
 
     public void PlayLoadingPulse(float duration, Action onComplete)
     {
-        if (IsLoading || handle == null)
+        if (IsLoading || fill == null)
             return;
+
         IsLoading = true;
-        shakeTween?.Kill();
+        fillTween?.Kill();
         delayTween?.Kill();
-        float startX = leftX;
-        float endX = rightX;
-        Vector3 position = handle.localPosition;
-        position.x = startX;
-        handle.localPosition = position;
-        float halfDuration = duration / 2f;
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(handle.DOLocalMoveX(endX, halfDuration).SetEase(Ease.InOutSine));
-        sequence.Append(handle.DOLocalMoveX(startX, halfDuration).SetEase(Ease.InOutSine));
-        sequence.SetLoops(-1, LoopType.Restart);
-        shakeTween = sequence;
+
+        float startValue = minValue;
+        float endValue = maxValue;
+        float animatedValue = startValue;
+        SetValue((int)startValue);
+
+        fillTween = DOTween.To(() => animatedValue, value =>
+        {
+            animatedValue = value;
+            SetValue(Mathf.RoundToInt(value));
+        }, endValue, duration / 2f)
+        .SetEase(Ease.InOutSine)
+        .SetLoops(-1, LoopType.Yoyo);
+
         delayTween = DOVirtual.DelayedCall(duration, () =>
         {
-            shakeTween?.Kill();
-            shakeTween = null;
+            fillTween?.Kill();
+            fillTween = null;
             delayTween = null;
-            if (handle != null)
-                SetValue(Value);
             IsLoading = false;
+            SetValue(Value);
             onComplete?.Invoke();
         });
     }
 
     public void CancelLoadingPulse()
     {
-        shakeTween?.Kill();
+        fillTween?.Kill();
         delayTween?.Kill();
-        shakeTween = null;
+        fillTween = null;
         delayTween = null;
         IsLoading = false;
-        if (handle != null)
-            SetValue(Value);
+        SetValue(Value);
     }
 
     public void ButtonPressed()
@@ -117,21 +134,7 @@ public class HumiditySlider : MonoBehaviour
 
     void OnDestroy()
     {
-        shakeTween?.Kill();
+        fillTween?.Kill();
         delayTween?.Kill();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Vector3 left = transform.TransformPoint(new Vector3(leftX, 0f, 0f));
-        Vector3 right = transform.TransformPoint(new Vector3(rightX, 0f, 0f));
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(left, 0.08f);
-        Gizmos.DrawSphere(right, 0.08f);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(left, right);
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(left + transform.up * -0.15f, left + transform.up * 0.15f);
-        Gizmos.DrawLine(right + transform.up * -0.15f, right + transform.up * 0.15f);
     }
 }

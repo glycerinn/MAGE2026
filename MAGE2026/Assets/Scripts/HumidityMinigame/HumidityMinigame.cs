@@ -8,7 +8,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
     public HumiditySlider[] sliders;
 
     [Header("Allowed Values")]
-    public int[] allowedValues = { 35, 50, 80 };
+    public int[] allowedValues = { 35, 50, 85 };
 
     [Header("Loading")]
     public float loadingDuration = 1f;

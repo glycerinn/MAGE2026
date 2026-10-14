@@ -266,8 +266,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -771,7 +771,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 2065528514, guid: aa1e4d890f367da49b331002ac97328c, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -780,7 +780,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.8
 --- !u!222 &716766284
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -937,7 +937,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -702, y: 0.000020027}
-  m_SizeDelta: {x: 132.6075, y: 146.8358}
+  m_SizeDelta: {x: 85, y: 165}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1078114447
 MonoBehaviour:
@@ -1015,7 +1015,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1467940638, guid: 475573841169a6c41a0bb2841ef7841c, type: 3}
+  m_Sprite: {fileID: -1997727108, guid: aa1e4d890f367da49b331002ac97328c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1077,6 +1077,8 @@ MonoBehaviour:
   previousButton: {fileID: 1078114445}
   nextButton: {fileID: 1287852496}
   continueButton: {fileID: 716766281}
+  slideDistance: 600
+  slideDuration: 0.25
   gameSceneName: SampleScene
 --- !u!114 &1248256961
 MonoBehaviour:
@@ -1197,7 +1199,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 705, y: 0.000020027}
-  m_SizeDelta: {x: 132.6075, y: 146.8358}
+  m_SizeDelta: {x: 85, y: 165}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1287852498
 MonoBehaviour:
@@ -1275,7 +1277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -352726804, guid: 475573841169a6c41a0bb2841ef7841c, type: 3}
+  m_Sprite: {fileID: -421078438, guid: aa1e4d890f367da49b331002ac97328c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1348,14 +1350,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -1347762501, guid: aa1e4d890f367da49b331002ac97328c, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1364,7 +1366,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.3
 --- !u!222 &1726258739
 CanvasRenderer:
   m_ObjectHideFlags: 0
