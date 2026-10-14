@@ -61,6 +61,11 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    public void SetInteractionModePublic(bool enabled)
+    {
+        SetInteractionMode(enabled);
+    }
+
     public void ResetCameraRotation()
     {
         xRotation = 0f;

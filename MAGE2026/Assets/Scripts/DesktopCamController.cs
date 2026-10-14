@@ -86,6 +86,9 @@ public class DesktopCamController : MonoBehaviour
         currentCam = index;
         inMinigame = true;
 
+        if (playerCamera != null)
+            playerCamera.SetInteractionModePublic(true);
+
         if (backButton != null)
             backButton.SetActive(true);
 
@@ -117,6 +120,9 @@ public class DesktopCamController : MonoBehaviour
 
         currentCam = -1;
         inMinigame = false;
+
+        if (playerCamera != null)
+            playerCamera.SetInteractionModePublic(false);
         
         if (backButton != null)
             backButton.SetActive(false);
