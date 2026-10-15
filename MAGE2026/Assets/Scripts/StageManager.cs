@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Yarn.Unity;
 
 public class StageManager : MonoBehaviour
@@ -47,6 +49,7 @@ public class StageManager : MonoBehaviour
     public GameObject diagnosisBlocker;
 
     private int currentStage;
+    private bool isTransitioning;
     private bool[] minigameCompleted;
     private bool stageComplete;
     private bool diagnosisStarted;
@@ -466,6 +469,19 @@ public class StageManager : MonoBehaviour
 
     public void Quit()
     {
-        Debug.Log("Quit pressed.");
+        if (isTransitioning)
+            return;
+
+        isTransitioning = true;
+        StartCoroutine(MainMenuLevel());
+    }
+
+    IEnumerator MainMenuLevel()
+    {
+        yield return StartCoroutine(Transition.Instance.PlayTransition());
+
+        SceneManager.LoadScene("MainMenu");
+
+        yield return StartCoroutine(Transition.Instance.EndTransition());
     }
 }

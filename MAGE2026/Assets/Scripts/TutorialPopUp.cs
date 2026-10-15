@@ -14,7 +14,6 @@ public class TutorialPopUp : MonoBehaviour
     {
         popupTransform = transform;
         originalScale = popupTransform.localScale;
-        gameObject.SetActive(false);
     }
 
     public void ShowPopUp()

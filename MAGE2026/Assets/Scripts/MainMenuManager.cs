@@ -12,6 +12,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject StageMenu;
     public TutorialPopUp TutorialPrompt;
     public TutorialPopUp StageMenuPopup;
+    private bool isTransitioning;
     public string TutorialSceneName = "Tutorial";
 
     public void Awake()
@@ -46,7 +47,11 @@ public class MainMenuManager : MonoBehaviour
 
     public void TutorialYes()
     {
-        SceneManager.LoadScene(TutorialSceneName);
+        if (isTransitioning)
+        return;
+
+        isTransitioning = true;
+        StartCoroutine(TutorialLevel());
     }
 
     public void TutorialNo()
@@ -69,6 +74,15 @@ public class MainMenuManager : MonoBehaviour
         // }
         
         Application.Quit();
+    }
+
+    IEnumerator TutorialLevel()
+    {
+        yield return StartCoroutine(Transition.Instance.PlayTransition());
+
+        SceneManager.LoadScene(TutorialSceneName);
+
+        yield return StartCoroutine(Transition.Instance.EndTransition());
     }
 
     // public void ContinueButton()

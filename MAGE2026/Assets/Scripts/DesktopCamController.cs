@@ -16,6 +16,7 @@ public class DesktopCamController : MonoBehaviour
     public CanvasGroup monitorButtonsGroup;
 
     public GlitchTransition[] cameraGlitches;
+    public GlitchTransition mainCameraGlitch;
 
     private int currentCam = -1;
     private bool inMinigame;
@@ -100,6 +101,9 @@ public class DesktopCamController : MonoBehaviour
 
     public void BackToMain()
     {
+        if (mainCameraGlitch != null)
+            mainCameraGlitch.PlayGlitchTransition();
+
         for (int i = 0; i < cams.Length; i++)
         {
             if (cams[i] != null)
@@ -116,20 +120,18 @@ public class DesktopCamController : MonoBehaviour
             main.gameObject.SetActive(true);
 
         if (playerCamera != null)
+        {
             playerCamera.ResetCameraRotation();
+            playerCamera.SetInteractionModePublic(false);
+        }
 
         currentCam = -1;
         inMinigame = false;
 
-        if (playerCamera != null)
-            playerCamera.SetInteractionModePublic(false);
-        
         if (backButton != null)
             backButton.SetActive(false);
 
-        Debug.Log(
-            "Returned to main room and reset camera direction."
-        );
+        Debug.Log("Returned to main room and reset camera direction.");
     }
 
     public bool IsInMinigame()

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Collections;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -35,6 +37,7 @@ public class TutorialManager : MonoBehaviour
     public string gameSceneName = "SampleScene";
 
     private int currentPage;
+    private bool isTransitioning;
     private RectTransform imageRect;
     private Vector2 imageStartPosition;
     private bool isAnimating;
@@ -133,12 +136,25 @@ public class TutorialManager : MonoBehaviour
 
     public void ContinueToGame()
     {
+        if (isTransitioning)
+            return;
+
+        isTransitioning = true;
         if (string.IsNullOrEmpty(gameSceneName))
         {
             Debug.LogError("TutorialManager: Game scene name is empty.");
             return;
         }
 
+        StartCoroutine(GameLevel());
+    }
+
+    IEnumerator GameLevel()
+    {
+        yield return StartCoroutine(Transition.Instance.PlayTransition());
+
         SceneManager.LoadScene(gameSceneName);
+
+        yield return StartCoroutine(Transition.Instance.EndTransition());
     }
 }
