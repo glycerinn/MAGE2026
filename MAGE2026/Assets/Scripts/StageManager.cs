@@ -15,6 +15,9 @@ public class StageManager : MonoBehaviour
     public Camera mainCamera;
     public Camera[] minigameCameras;
 
+    [Header("Screen Blockers")]
+    public GameObject[] minigameBlockers;
+
     [Header("Stage Complete UI")]
     public GameObject stageCompleteScreen;
     public TMP_Text stageCompleteText;
@@ -94,6 +97,7 @@ public class StageManager : MonoBehaviour
         int minigameCount = GetMinigameCountForStage();
         minigameCompleted = new bool[minigameCount];
 
+        UpdateScreenBlockers();
         DisableAllMinigames();
 
         if (DiagnosisManager.Instance != null)
@@ -113,7 +117,7 @@ public class StageManager : MonoBehaviour
 
     int GetMinigameCountForStage()
     {
-        return Mathf.Min(CurrentStage, minigames.Length);
+        return Mathf.Min(CurrentStage, 4, minigames.Length);
     }
 
     void StartStageDialogue()
@@ -187,6 +191,22 @@ public class StageManager : MonoBehaviour
         Debug.Log("Stage " + CurrentStage + " opening dialogue complete.");
 
         ActivateAllMinigames();
+    }
+
+    void UpdateScreenBlockers()
+    {
+        int availableCount = GetMinigameCountForStage();
+
+        for (int i = 0; i < minigameBlockers.Length; i++)
+        {
+            if (minigameBlockers[i] == null)
+                continue;
+
+            minigameBlockers[i].SetActive(i >= availableCount);
+        }
+
+        if (diagnosisBlocker != null)
+            diagnosisBlocker.SetActive(!diagnosisStarted);
     }
 
     public void SkipDialogue()
@@ -285,10 +305,13 @@ public class StageManager : MonoBehaviour
 
         for (int i = 0; i < minigameCount; i++)
         {
-            if (!minigameCompleted[i])
+            if (!minigameCompleted[i]){
+                Debug.Log("Waiting for minigame at index " + i + ": " + (minigames[i] != null ? minigames[i].name : "NULL"));
                 return;
+            }
         }
 
+        Debug.Log("All " + minigameCount + " minigames completed. Starting diagnosis.");
         StartDiagnosis();
     }
 
@@ -298,6 +321,7 @@ public class StageManager : MonoBehaviour
             return;
 
         diagnosisStarted = true;
+        UpdateScreenBlockers();
 
         if (diagnosisBlocker != null)
             diagnosisBlocker.SetActive(false);
