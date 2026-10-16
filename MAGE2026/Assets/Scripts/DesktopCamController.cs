@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class DesktopCamController : MonoBehaviour
@@ -32,7 +33,7 @@ public class DesktopCamController : MonoBehaviour
         if (backButton != null)
             backButton.SetActive(false);
 
-        for (int i = 0; i < cams.Length; i++)
+        for (int i = 0; cams != null && i < cams.Length; i++)
         {
             if (cams[i] != null)
                 cams[i].gameObject.SetActive(false);
@@ -43,10 +44,13 @@ public class DesktopCamController : MonoBehaviour
     {
         if (index < 0 || index >= cams.Length)
         {
-            Debug.LogWarning(
-                "Invalid minigame camera index: " +
-                index
-            );
+            Debug.LogWarning("Invalid minigame camera index: " + index);
+            return;
+        }
+
+        if (cams[index] == null)
+        {
+            Debug.LogWarning("Minigame camera at index " + index + " is not assigned.");
             return;
         }
 
@@ -54,16 +58,6 @@ public class DesktopCamController : MonoBehaviour
         {
             monitorButtonsGroup.interactable = false;
             monitorButtonsGroup.blocksRaycasts = false;
-        }
-
-        if (cams[index] == null)
-        {
-            Debug.LogWarning(
-                "Minigame camera at index " +
-                index +
-                " is not assigned."
-            );
-            return;
         }
 
         if (main != null)
@@ -93,10 +87,7 @@ public class DesktopCamController : MonoBehaviour
         if (backButton != null)
             backButton.SetActive(true);
 
-        Debug.Log(
-            "Opened minigame camera: " +
-            cams[index].name
-        );
+        Debug.Log("Opened minigame camera: " + cams[index].name);
     }
 
     public void BackToMain()
@@ -104,16 +95,16 @@ public class DesktopCamController : MonoBehaviour
         if (mainCameraGlitch != null)
             mainCameraGlitch.PlayGlitchTransition();
 
-        for (int i = 0; i < cams.Length; i++)
+        ResetToMainCamera();
+        Debug.Log("Returned to main room and reset camera direction.");
+    }
+
+    public void ResetToMainCamera()
+    {
+        for (int i = 0; cams != null && i < cams.Length; i++)
         {
             if (cams[i] != null)
                 cams[i].gameObject.SetActive(false);
-        }
-
-        if (monitorButtonsGroup != null)
-        {
-            monitorButtonsGroup.interactable = true;
-            monitorButtonsGroup.blocksRaycasts = true;
         }
 
         if (main != null)
@@ -125,13 +116,17 @@ public class DesktopCamController : MonoBehaviour
             playerCamera.SetInteractionModePublic(false);
         }
 
+        if (monitorButtonsGroup != null)
+        {
+            monitorButtonsGroup.interactable = true;
+            monitorButtonsGroup.blocksRaycasts = true;
+        }
+
         currentCam = -1;
         inMinigame = false;
 
         if (backButton != null)
             backButton.SetActive(false);
-
-        Debug.Log("Returned to main room and reset camera direction.");
     }
 
     public bool IsInMinigame()

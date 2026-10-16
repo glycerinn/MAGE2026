@@ -27,6 +27,9 @@ public class StageManager : MonoBehaviour
     [Header("Stage Complete Animation")]
     public StageFinishAnimation stageAnimation;
 
+    [Header("Desktop Camera Controller")]
+    public DesktopCamController desktopCamController;
+
     [Header("Yarn Dialogue")]
     public DialogueRunner dialogueRunner;
     public string[] stageDialogueNodes =
@@ -91,6 +94,9 @@ public class StageManager : MonoBehaviour
 
     void StartStage()
     {
+        if (desktopCamController != null)
+            desktopCamController.ResetToMainCamera();
+
         stageComplete = false;
         diagnosisStarted = false;
 
@@ -101,17 +107,9 @@ public class StageManager : MonoBehaviour
         DisableAllMinigames();
 
         if (DiagnosisManager.Instance != null)
-        {
-            DiagnosisManager.Instance.StartStageDiagnosis(
-                CurrentStage
-            );
-        }
+            DiagnosisManager.Instance.StartStageDiagnosis(CurrentStage);
 
-        Debug.Log(
-            "Starting Stage " +
-            CurrentStage
-        );
-
+        Debug.Log("Starting Stage " + CurrentStage);
         StartStageDialogue();
     }
 
