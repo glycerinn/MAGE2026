@@ -1,0 +1,6 @@
+# Made in Blockbench 5.2.2
+newmtl m_fdb744a1-baa4-582b-85ee-23d03abbc7c6
+map_Kd texture.png
+newmtl m_968e5582-b7e9-d32d-9b0b-373a7018fd30
+map_Kd grass.texture.png
+newmtl none
