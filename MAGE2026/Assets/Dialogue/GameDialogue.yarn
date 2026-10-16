@@ -1,10 +1,18 @@
 ﻿title: Stage1
 ---
-This is an example of a Yarn Spinner script. Write your dialogue here!
+<<show_character "Intern">>
+Intern: Enjin why are we in a game
+
+<<show_character "Instructor">>
+Instructor: yea i'm not sure either
 ===
 title: Stage2
 ---
-This is an example of a Yarn Spinner script. Write your dialogue here.
+<<show_character "Intern">>
+Intern: Enjin why are we in a game?
+
+<<show_character "Instructor">>
+Instructor: yea i'm not sure either
 ===
 title: Stage3
 ---

@@ -1,11 +1,13 @@
 using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PauseManager : MonoBehaviour
 {
         public static bool GameisPaused = false;
         public GameObject pauseMenuUI;
+        private bool isTransitioning;
 
         void Start()
         {
@@ -43,7 +45,20 @@ public class PauseManager : MonoBehaviour
 
         public void LoadMenu()
         {
+            if (isTransitioning)
+            return;
+
+            isTransitioning = true;
             Time.timeScale = 1f;
+            StartCoroutine(MainLevel());
+        }
+
+        IEnumerator MainLevel()
+        {
+            yield return StartCoroutine(Transition.Instance.PlayTransition());
+
             SceneManager.LoadScene("MainMenu");
+
+            yield return StartCoroutine(Transition.Instance.EndTransition());
         }
 }
