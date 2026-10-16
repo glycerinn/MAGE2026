@@ -8467,7 +8467,6 @@ MonoBehaviour:
   - {fileID: 558401080}
   - {fileID: 1897452126}
   mainCameraGlitch: {fileID: 330585549}
-  diagnosisCamera: {fileID: 1897452120}
 --- !u!4 &718484396
 Transform:
   m_ObjectHideFlags: 0
@@ -19929,7 +19928,6 @@ MonoBehaviour:
   playerCamera: {fileID: 1212840520}
   dialogueInputBlocker: {fileID: 1844450477}
   diagnosisBlocker: {fileID: 470599092}
-  desktopCamController: {fileID: 718484395}
 --- !u!4 &2009242655
 Transform:
   m_ObjectHideFlags: 0
