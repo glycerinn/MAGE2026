@@ -347,6 +347,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    
     void ShowCorrectResult()
     {
         stageComplete = true;
@@ -359,8 +360,10 @@ public class StageManager : MonoBehaviour
                 " COMPLETE!";
         }
 
+        bool isLastStage = currentStage >= 4;
+
         if (nextStageButton != null)
-            nextStageButton.SetActive(true);
+            nextStageButton.SetActive(!isLastStage);
 
         if (retryButton != null)
             retryButton.SetActive(false);
