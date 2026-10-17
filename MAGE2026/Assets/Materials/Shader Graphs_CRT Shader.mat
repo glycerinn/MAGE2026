@@ -37,9 +37,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blur: 0.00049
-    - _Scan_Lines: 0
-    - _Scanline_Number: 200
+    - _Blur: 0
+    - _Scan_Lines: 0.088
+    - _Scanline_Number: 400
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
