@@ -16,6 +16,9 @@ public class DesktopCamController : MonoBehaviour
     [Header("Monitor Button Interaction")]
     public CanvasGroup monitorButtonsGroup;
 
+    [Header("Pixelation Display")]
+    public GameObject pixelationCanvas;
+
     public GlitchTransition[] cameraGlitches;
     public GlitchTransition mainCameraGlitch;
 
@@ -47,6 +50,9 @@ public class DesktopCamController : MonoBehaviour
             Debug.LogWarning("Invalid minigame camera index: " + index);
             return;
         }
+
+        if (pixelationCanvas != null)
+        pixelationCanvas.SetActive(false);
 
         if (cams[index] == null)
         {
@@ -106,6 +112,9 @@ public class DesktopCamController : MonoBehaviour
             if (cams[i] != null)
                 cams[i].gameObject.SetActive(false);
         }
+
+        if (pixelationCanvas != null)
+        pixelationCanvas.SetActive(true);
 
         if (main != null)
             main.gameObject.SetActive(true);

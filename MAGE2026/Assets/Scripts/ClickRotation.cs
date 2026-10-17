@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using DG.Tweening;
 
@@ -8,6 +9,10 @@ public class ClickRotation : MonoBehaviour
     public float duration = 0.2f;
     public Ease ease = Ease.OutSine;
 
+    [Header("Input Settings")]
+    public Camera inputCamera;
+    public LayerMask clickableLayers = ~0;
+
     private Quaternion originalRotation;
     private Tween rotationTween;
 
@@ -16,7 +21,21 @@ public class ClickRotation : MonoBehaviour
         originalRotation = transform.localRotation;
     }
 
-    void OnMouseDown()
+    void Update()
+    {
+        if (inputCamera == null || !Input.GetMouseButtonDown(0))
+            return;
+
+        Ray ray = inputCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, clickableLayers))
+        {
+            if (hit.transform == transform || hit.transform.IsChildOf(transform))
+                RotateOnClick();
+        }
+    }
+
+    void RotateOnClick()
     {
         rotationTween?.Kill();
 
@@ -36,7 +55,8 @@ public class ClickRotation : MonoBehaviour
     void OnDisable()
     {
         rotationTween?.Kill();
-        transform.localRotation = originalRotation;
+        if (transform != null)
+            transform.localRotation = originalRotation;
     }
 
     void OnDestroy()
