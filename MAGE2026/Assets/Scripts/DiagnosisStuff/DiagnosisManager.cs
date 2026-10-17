@@ -120,26 +120,29 @@ public class DiagnosisManager : MonoBehaviour
         if (currentRule == null)
         {
             Debug.LogError(
-                "No diagnosis rule has been selected."
+                "DiagnosisManager: No diagnosis rule has been selected."
             );
-
             return "";
         }
 
-        for (int i = 0;
-            i < currentRule.conditions.Count;
-            i++)
+        for (int i = 0; i < currentRule.conditions.Count; i++)
         {
-            DiagnosisSO.Condition condition =
-                currentRule.conditions[i];
+            DiagnosisSO.Condition condition = currentRule.conditions[i];
 
             if (condition.source == source)
+            {
+                Debug.Log(
+                    "DiagnosisManager: Found clue for " + source +
+                    " in diagnosis rule: " + currentRule.diagnosis
+                );
+
                 return condition.value;
+            }
         }
 
-        Debug.LogWarning(
-            "No clue for source: " +
-            source
+        Debug.LogError(
+            "DiagnosisManager: Rule '" + currentRule.diagnosis +
+            "' has no condition with source '" + source + "'."
         );
 
         return "";

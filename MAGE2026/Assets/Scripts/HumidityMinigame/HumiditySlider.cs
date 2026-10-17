@@ -31,9 +31,11 @@ public class HumiditySlider : MonoBehaviour
     private Tween fillTween;
     private Tween delayTween;
     private HumidityMinigame minigame;
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         minigame = GetComponentInParent<HumidityMinigame>();
         if (fill != null)
         {
@@ -78,6 +80,7 @@ public class HumiditySlider : MonoBehaviour
 
     public void PlayLoadingPulse(float duration, Action onComplete)
     {
+        audioManager.playFix2SFX();
         if (IsLoading || fill == null)
             return;
 

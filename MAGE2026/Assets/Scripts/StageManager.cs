@@ -59,11 +59,13 @@ public class StageManager : MonoBehaviour
     private bool[] minigameCompleted;
     private bool stageComplete;
     private bool diagnosisStarted;
+    private AudioManager audioManager;
 
     public int CurrentStage => currentStage + 1;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -75,6 +77,7 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
+        audioManager.playGameBGM();
         currentStage = PlayerPrefs.GetInt("SelectedStage", 1) - 1;
 
         currentStage = Mathf.Clamp(currentStage, 0, 4);

@@ -6,9 +6,11 @@ public class HumidityButton : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (spriteRenderer != null)
@@ -17,6 +19,7 @@ public class HumidityButton : MonoBehaviour
 
     void OnMouseDown()
     {
+        audioManager.playClickSFX();
         if (slider == null || slider.IsLocked)
             return;
 

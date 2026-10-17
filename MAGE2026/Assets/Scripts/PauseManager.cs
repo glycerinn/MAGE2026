@@ -8,6 +8,12 @@ public class PauseManager : MonoBehaviour
         public static bool GameisPaused = false;
         public GameObject pauseMenuUI;
         private bool isTransitioning;
+        private AudioManager audioManager;
+
+        public void Awake()
+        {
+            audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+        }
 
         void Start()
         {
@@ -31,6 +37,7 @@ public class PauseManager : MonoBehaviour
 
         public void Resume()
         {
+            audioManager.playClickSFX();
             pauseMenuUI.SetActive(false);
             Time.timeScale = 1f;
             GameisPaused = false;
@@ -48,6 +55,7 @@ public class PauseManager : MonoBehaviour
             if (isTransitioning)
             return;
 
+            audioManager.playClickSFX();
             isTransitioning = true;
             Time.timeScale = 1f;
             StartCoroutine(MainLevel());

@@ -18,6 +18,12 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
 
     private int majorityValue;
     private bool hasWon;
+    private AudioManager audioManager;
+
+    public void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+    }
 
     public void StartHumidityMinigame()
     {
@@ -126,6 +132,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             {
                 sliders[i].SetValue(majorityValue);
                 sliders[i].Lock();
+                audioManager.playHumSuccessSFX();
             }
             else
             {
@@ -138,6 +145,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
                 while (startingValue == majorityValue);
 
                 sliders[i].SetValue(startingValue);
+                audioManager.playHumFailSFX();
             }
         }
 

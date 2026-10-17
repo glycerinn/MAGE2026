@@ -36,6 +36,14 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
     private int completedRounds;
     private float alignmentTimer;
     private bool hasWon;
+    private bool isFixSFXPlaying;
+
+    private AudioManager audioManager;
+
+    public void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+    }
 
     void Start()
     {
@@ -86,14 +94,28 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
         {
             alignmentTimer += Time.deltaTime;
 
+            if (!isFixSFXPlaying)
+            {
+                audioManager.playFixSFX();
+                isFixSFXPlaying = true;
+            }
+
             if (alignmentTimer >= requiredHoldTime)
             {
                 CompleteRound();
+                audioManager.StopSFX();
+                isFixSFXPlaying = false;
             }
         }
         else
         {
             alignmentTimer = 0f;
+
+            if (isFixSFXPlaying)
+            {
+                audioManager.StopSFX();
+                isFixSFXPlaying = false;
+            }
         }
     }
 

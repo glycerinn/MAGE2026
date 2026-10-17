@@ -41,6 +41,12 @@ public class TutorialManager : MonoBehaviour
     private RectTransform imageRect;
     private Vector2 imageStartPosition;
     private bool isAnimating;
+    private AudioManager audioManager;
+
+    public void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+    }
 
     void Start()
     {
@@ -63,6 +69,7 @@ public class TutorialManager : MonoBehaviour
 
     public void NextPage()
     {
+        audioManager.playClickSFX();
         if (isAnimating || pages == null || currentPage >= pages.Length - 1)
             return;
 
@@ -72,6 +79,7 @@ public class TutorialManager : MonoBehaviour
 
     public void PreviousPage()
     {
+        audioManager.playClickSFX();
         if (isAnimating || pages == null || currentPage <= 0)
             return;
 

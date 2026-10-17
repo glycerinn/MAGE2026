@@ -7,7 +7,7 @@ public class MainMenuManager : MonoBehaviour
 {
     // public GameObject Credits;
     // public LevelLoader levelLoader;
-    // private AudioManager audioManager;
+    private AudioManager audioManager;
     private int sceneToContinue;
     public GameObject StageMenu;
     public TutorialPopUp TutorialPrompt;
@@ -18,30 +18,29 @@ public class MainMenuManager : MonoBehaviour
     public void Awake()
     {
         StageMenu.SetActive(false);
-        // GameObject audioObj = GameObject.FindGameObjectWithTag("AudioManager");
+        GameObject audioObj = GameObject.FindGameObjectWithTag("AudioManager");
 
-        // if (audioObj != null)
-        // {
-        //     audioManager = audioObj.GetComponent<AudioManager>();
-        //     Debug.Log("found");
-        // }
-        // else
-        // {
-        //     Debug.LogError("AudioManager not found in scene!");
-        // }
+        if (audioObj != null)
+        {
+            audioManager = audioObj.GetComponent<AudioManager>();
+            Debug.Log("found");
+        }
+        else
+        {
+            Debug.LogError("AudioManager not found in scene!");
+        }
             
     }
 
     public void Start()
     {
-        // AudioManager.instance.playMainMenuBGM();
+        AudioManager.instance.playMainMenuBGM();
         Time.timeScale = 1f;
     }
 
     public void PlayGame()
     {
-        // StartCoroutine(levelLoader.PlayTutorialTransition());
-        // audioManager.playButtonSFX();
+        audioManager.playClickSFX();
         TutorialPrompt.ShowPopUp();
     }
 
@@ -51,28 +50,26 @@ public class MainMenuManager : MonoBehaviour
         return;
 
         isTransitioning = true;
+        audioManager.playYesSFX();
         StartCoroutine(TutorialLevel());
     }
 
     public void TutorialNo()
     {
+        audioManager.playClickSFX();
         TutorialPrompt.HidePopUp();
         StageMenuPopup.ShowPopUp();
     }
 
     public void Back()
     {
+        audioManager.playClickSFX();
         StageMenuPopup.HidePopUp();
     }
 
     public void QuitGame()
     {
-        // if(audioManager != null)
-        // {
-        //     audioManager.playButtonSFX();
-        //     Debug.Log("click2");
-        // }
-        
+        audioManager.playClickSFX();
         Application.Quit();
     }
 
@@ -84,18 +81,4 @@ public class MainMenuManager : MonoBehaviour
 
         yield return StartCoroutine(Transition.Instance.EndTransition());
     }
-
-    // public void ContinueButton()
-    // {
-    //     sceneToContinue = PlayerPrefs.GetInt("SavedScene");
-    //     if(sceneToContinue != 0)
-    //     {
-    //         StartCoroutine(levelLoader.PlayContinueTransition(sceneToContinue));
-    //     }
-    //     else
-    //     {
-    //         return;
-    //     }
-
-    // }
 }

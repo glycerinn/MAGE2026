@@ -11,9 +11,11 @@ public class CluePopup : MonoBehaviour
     private Transform popupTransform;
     private Vector3 originalScale;
     private Tween popTween;
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         popupTransform = transform;
         originalScale = popupTransform.localScale;
         gameObject.SetActive(false);
@@ -21,6 +23,7 @@ public class CluePopup : MonoBehaviour
 
     public void ShowClue(string source, string value)
     {
+        audioManager.playMinigamesuccessSFX();
         if (clueText == null)
         {
             Debug.LogError("CluePopup: Clue Text is not assigned.");

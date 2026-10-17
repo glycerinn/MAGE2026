@@ -42,9 +42,11 @@ public class CloudItem : MonoBehaviour
     private float distanceWhenPickedUp;
     private float dragStartTime;
     private float dragZ;
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         originalRotation = transform.rotation;
         originalScale = transform.localScale;
         ChooseRandomSprite();
@@ -110,6 +112,7 @@ public class CloudItem : MonoBehaviour
 
     void OnMouseDown()
     {
+        audioManager.playGrabSFX();
         IsDragging = true;
         scaleTween?.Kill();
         transform.localScale = originalScale;
