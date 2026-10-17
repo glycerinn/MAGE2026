@@ -29,7 +29,7 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
     public CluePopup cluePopup;
 
     [Header("Win Condition")]
-    public int winAmount = 3;
+    public int winAmount = 5;
 
     private float lineAngle;
     private float targetAngle;

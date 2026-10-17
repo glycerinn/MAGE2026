@@ -11,7 +11,7 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
     public int[] allowedValues = { 35, 50, 85 };
 
     [Header("Loading")]
-    public float loadingDuration = 1f;
+    public float loadingDuration = 13f;
 
     [Header("Clue")]
     public CluePopup cluePopup;
