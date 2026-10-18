@@ -1,20 +1,18 @@
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    // public GameObject Credits;
-    // public LevelLoader levelLoader;
     private AudioManager audioManager;
-    private int sceneToContinue;
     public GameObject StageMenu;
     public TutorialPopUp TutorialPrompt;
     public TutorialPopUp StageMenuPopup;
     public TutorialPopUp CreditsPopup;
     private bool isTransitioning;
     public string TutorialSceneName = "Tutorial";
+
+    private static bool tutorialShownThisSession;
 
     public void Awake()
     {
@@ -30,11 +28,12 @@ public class MainMenuManager : MonoBehaviour
         {
             Debug.LogError("AudioManager not found in scene!");
         }
-            
     }
 
     public void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         AudioManager.instance.playMainMenuBGM();
         Time.timeScale = 1f;
     }
@@ -42,13 +41,22 @@ public class MainMenuManager : MonoBehaviour
     public void PlayGame()
     {
         audioManager.playClickSFX();
-        TutorialPrompt.ShowPopUp();
+
+        if (!tutorialShownThisSession)
+        {
+            tutorialShownThisSession = true;
+            TutorialPrompt.ShowPopUp();
+        }
+        else
+        {
+            StageMenuPopup.ShowPopUp();
+        }
     }
 
     public void TutorialYes()
     {
         if (isTransitioning)
-        return;
+            return;
 
         isTransitioning = true;
         audioManager.playYesSFX();

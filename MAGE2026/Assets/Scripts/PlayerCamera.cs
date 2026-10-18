@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
@@ -11,17 +12,25 @@ public class PlayerCamera : MonoBehaviour
     private float xRotation = 0f;
     private bool canLook = true;
     private bool interactionMode = false;
+    private bool interactionModeForced = false;
 
     void Start()
     {
-        SetInteractionMode(false);
+        interactionMode = false;
+        interactionModeForced = false;
+        ApplyCursorState();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
+        if (Input.GetKeyDown(KeyCode.LeftControl) ||
+            Input.GetKeyDown(KeyCode.RightControl))
         {
-            SetInteractionMode(!interactionMode);
+            if (canLook && !interactionModeForced)
+            {
+                interactionMode = !interactionMode;
+                ApplyCursorState();
+            }
         }
 
         if (!canLook || interactionMode)
@@ -37,33 +46,39 @@ public class PlayerCamera : MonoBehaviour
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
     }
 
-    void SetInteractionMode(bool enabled)
+    void ApplyCursorState()
     {
-        interactionMode = enabled;
-        Cursor.lockState = enabled ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = enabled;
+        bool showCursor = !canLook || interactionMode;
+
+        Cursor.lockState = showCursor
+            ? CursorLockMode.None
+            : CursorLockMode.Locked;
+
+        Cursor.visible = showCursor;
+
         if (crosshair != null)
-            crosshair.SetActive(!enabled);
+            crosshair.SetActive(canLook && !interactionMode);
     }
 
     public void SetCameraLook(bool enabled)
     {
         canLook = enabled;
-        if (!enabled)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (!interactionMode)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        ApplyCursorState();
     }
 
     public void SetInteractionModePublic(bool enabled)
     {
-        SetInteractionMode(enabled);
+        interactionMode = enabled;
+        interactionModeForced = enabled;
+        ApplyCursorState();
+    }
+
+    public void ForceGameplayCursorState()
+    {
+        canLook = true;
+        interactionMode = false;
+        interactionModeForced = false;
+        ApplyCursorState();
     }
 
     public void ResetCameraRotation()

@@ -43,6 +43,14 @@ public class DesktopCamController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && inMinigame)
+        {
+            BackToMain();
+        }
+    }
+
     public void OpenMinigame(int index)
     {
         if (index < 0 || index >= cams.Length)
@@ -98,6 +106,9 @@ public class DesktopCamController : MonoBehaviour
 
     public void BackToMain()
     {
+        if (!inMinigame)
+            return;
+
         if (mainCameraGlitch != null)
             mainCameraGlitch.PlayGlitchTransition();
 
@@ -114,7 +125,7 @@ public class DesktopCamController : MonoBehaviour
         }
 
         if (pixelationCanvas != null)
-        pixelationCanvas.SetActive(true);
+            pixelationCanvas.SetActive(true);
 
         if (main != null)
             main.gameObject.SetActive(true);
@@ -122,7 +133,7 @@ public class DesktopCamController : MonoBehaviour
         if (playerCamera != null)
         {
             playerCamera.ResetCameraRotation();
-            playerCamera.SetInteractionModePublic(false);
+            playerCamera.ForceGameplayCursorState();
         }
 
         if (monitorButtonsGroup != null)

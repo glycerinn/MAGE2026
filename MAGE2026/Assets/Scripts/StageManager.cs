@@ -361,6 +361,12 @@ public class StageManager : MonoBehaviour
 
         bool isLastStage = currentStage >= 4;
 
+        if (isLastStage)
+        {
+            PlayerPrefs.SetInt("GameCompleted", 1);
+            PlayerPrefs.Save();
+        }
+
         if (nextStageButton != null)
             nextStageButton.SetActive(!isLastStage);
 
@@ -397,10 +403,18 @@ public class StageManager : MonoBehaviour
 
     public void RestartCurrentStage()
     {
-        Debug.Log(
-            "RETRYING STAGE " +
-            CurrentStage
-        );
+        if (isTransitioning)
+            return;
+
+        isTransitioning = true;
+        StartCoroutine(RestartStageTransition());
+    }
+
+    IEnumerator RestartStageTransition()
+    {
+        yield return StartCoroutine(Transition.Instance.PlayTransition());
+
+        Debug.Log("RETRYING STAGE " + CurrentStage);
 
         stageComplete = false;
         diagnosisStarted = false;
@@ -418,30 +432,37 @@ public class StageManager : MonoBehaviour
             stageAnimation.Hide();
 
         ResetMinigames();
-
         StartStage();
+
+        yield return StartCoroutine(Transition.Instance.EndTransition());
+
+        isTransitioning = false;
     }
 
     public void NextStage()
     {
-        if (!stageComplete)
+        if (!stageComplete || isTransitioning)
             return;
 
         if (currentStage >= 4)
         {
-            Debug.Log(
-                "ALL STAGES COMPLETE!"
-            );
-
+            Debug.Log("ALL STAGES COMPLETE!");
             return;
         }
+
+        isTransitioning = true;
+        StartCoroutine(NextStageTransition());
+    }
+
+    IEnumerator NextStageTransition()
+    {
+        yield return StartCoroutine(Transition.Instance.PlayTransition());
 
         currentStage++;
         stageComplete = false;
         diagnosisStarted = false;
 
         PlayerPrefs.SetInt("SelectedStage", CurrentStage);
-
         PlayerPrefs.Save();
 
         if (stageAnimation != null)
@@ -452,6 +473,10 @@ public class StageManager : MonoBehaviour
 
         ResetMinigames();
         StartStage();
+
+        yield return StartCoroutine(Transition.Instance.EndTransition());
+
+        isTransitioning = false;
     }
 
     void ResetMinigames()
