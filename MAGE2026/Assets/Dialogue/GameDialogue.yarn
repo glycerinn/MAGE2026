@@ -1,26 +1,99 @@
 ﻿title: Stage1
 ---
+<<show_character "Instructor">>
+Instructor: Good morning Junior, sorry for my tardiness.
+Instructor: Are you ready to begin your first day?
+
 <<show_character "Intern">>
-Intern: Enjin why are we in a game
+Intern: Uh, yes
+Intern: But what am I supposed to do anyway…
+Intern: The jobdesc told me that my job is to “investigate the weather”?
 
 <<show_character "Instructor">>
-Instructor: yea i'm not sure either
+Instructor: Yes. That is what we do.
+Instructor: You see the five screens in front of you
+Instructor: Each screen is hooked up into a program that collects meteorological data
+Instructor: For today, you will collect cloud data. It is the monitor on the bottom left.
+Instructor: Drag the clouds to each folder then submit your findings, easy as that
+Instructor: I’ll leave you to it, goodluck Junior
+
+<<show_character "Intern">>
+Intern: Okay, I have to identify clouds.
 ===
 title: Stage2
 ---
+<<show_character "Instructor">>
+Instructor: Good morning junior, ready to start your second day?
+
 <<show_character "Intern">>
-Intern: Enjin why are we in a game?
+Intern: Yes, ma’am
 
 <<show_character "Instructor">>
-Instructor: yea i'm not sure either
+Instructor: Wonderful!
+Instructor: So today, on top of identifying clouds, you’ll have to move satellite discs to the correct location.
+Instructor: You have what it takes junior, goodluck
+
+<<show_character "Intern">>
+Intern: Man…
+Intern: I wish she wasn’t always in a hurry
+Intern: Satellite data should be the rightmost screen
+
 ===
 title: Stage3
 ---
-This is an example of a Yarn Spinner script. Write your dialogue here?
+<<show_character "Intern">>
+Intern: She is late again
+Intern: I wonder what’s in store for today.
+
+<<show_character "Instructor">>
+Instructor: Good morning my lovely junior
+Instructor: For today you are going to gather humidity data
+Instructor: But our humidity tracker goes haywire easy and we have to recalibrate them all the time
+Instructor: You have to click on the broken humidity gauge to fix it
+
+<<show_character "Intern">>
+Intern: So much for technology…
+
+<<show_character "Instructor">>
+Instructor: What did you say?
+
+<<show_character "Intern">>
+Intern: Erp! Nothing 
+
+<<show_character "Instructor">>
+Instructor: If you are good to go then I’ll leave you to it
+Instructor: Good luck
+
+<<show_character "Intern">>
+Intern: And there she goes again…
+Intern: Right so the humidity data should be the top left screen
+Intern: Better get to work
+
 ===
 title: Stage4
 ---
-This is an example of a Yarn Spinner script. Write your dialogue here
+<<show_character "Instructor">>
+Instructor: Junior, you are late. I expected better
+
+<<show_character "Intern">>
+Intern: Ack! 
+Intern: I didn’t expect you to come early
+
+<<show_character "Instructor">>
+Instructor: I’m disappointed
+Instructor: But since you’ve been doing a good job…
+Instructor: I’ll let it slide
+Instructor: For today, you are going to collect rainfall data. 
+Instructor: Pick the gauge that is the most balanced out of the three
+Instructor: It’s easy, even a kid could do that
+Instructor: Alright, goodluck junior. Toodles
+
+<<show_character "Intern">>
+Intern: Of all days she has to come early today, just my luck 
+Intern: I gotta do a good job if I wanna stay in this position.
+Intern: The rainfall gauge is the rightmost top screen.
+
+
 ===
 title: Stage5
 ---

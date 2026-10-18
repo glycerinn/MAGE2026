@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Yarn.Unity;
 
 public class StageManager : MonoBehaviour
@@ -20,7 +21,9 @@ public class StageManager : MonoBehaviour
 
     [Header("Stage Complete UI")]
     public GameObject stageCompleteScreen;
-    public TMP_Text stageCompleteText;
+    public Image stageResultImage;
+    public Sprite correctResultSprite;
+    public Sprite incorrectResultSprite;
     public GameObject nextStageButton;
     public GameObject retryButton;
 
@@ -43,7 +46,7 @@ public class StageManager : MonoBehaviour
     public GameObject skipDialogueButton;
 
     [Header("Dialogue Character")]
-    public DialogueBob dialogueCharacter;
+    public DialogueCharacterDisplay dialogueCharacterDisplay;
 
     [Header("Player Camera")]
     public PlayerCamera playerCamera;
@@ -164,9 +167,6 @@ public class StageManager : MonoBehaviour
         if (dialogueInputBlocker != null)
             dialogueInputBlocker.SetActive(true);
 
-        if (dialogueCharacter != null)
-            dialogueCharacter.Show();
-
         if (playerCamera != null)
         playerCamera.SetCameraLook(false);
 
@@ -183,8 +183,8 @@ public class StageManager : MonoBehaviour
         if (skipDialogueButton != null)
             skipDialogueButton.SetActive(false);
 
-        if (dialogueCharacter != null)
-            dialogueCharacter.Hide();
+        if (dialogueCharacterDisplay != null)
+            dialogueCharacterDisplay.HideCharacter();
 
         if (dialogueInputBlocker != null)
             dialogueInputBlocker.SetActive(false);
@@ -355,13 +355,8 @@ public class StageManager : MonoBehaviour
     {
         stageComplete = true;
 
-        if (stageCompleteText != null)
-        {
-            stageCompleteText.text =
-                "STAGE " +
-                CurrentStage +
-                " COMPLETE!";
-        }
+        if (stageResultImage != null)
+            stageResultImage.sprite = correctResultSprite;
 
         bool isLastStage = currentStage >= 4;
 
@@ -382,8 +377,8 @@ public class StageManager : MonoBehaviour
     {
         stageComplete = false;
 
-        if (stageCompleteText != null)
-            stageCompleteText.text = "INCORRECT!";
+        if (stageResultImage != null)
+            stageResultImage.sprite = incorrectResultSprite;
 
         if (nextStageButton != null)
             nextStageButton.SetActive(false);
