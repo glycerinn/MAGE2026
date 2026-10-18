@@ -12,6 +12,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject StageMenu;
     public TutorialPopUp TutorialPrompt;
     public TutorialPopUp StageMenuPopup;
+    public TutorialPopUp CreditsPopup;
     private bool isTransitioning;
     public string TutorialSceneName = "Tutorial";
 
@@ -65,6 +66,18 @@ public class MainMenuManager : MonoBehaviour
     {
         audioManager.playClickSFX();
         StageMenuPopup.HidePopUp();
+    }
+
+    public void Credits()
+    {
+        audioManager.playClickSFX();
+        CreditsPopup.ShowPopUp();
+    }
+
+    public void BackCredits()
+    {
+        audioManager.playClickSFX();
+        CreditsPopup.HidePopUp();
     }
 
     public void QuitGame()

@@ -9,8 +9,8 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip MainMenuBGM;
     public AudioClip GameBGM;
-    public AudioClip GameOverBGM;
-    public AudioClip DialogueBGM;
+    public AudioClip GameOverSFX;
+    public AudioClip GameWinSFX;
     public AudioClip clicksfx;
     public AudioClip hoversfx;
     public AudioClip grabsfx;
@@ -64,6 +64,16 @@ public class AudioManager : MonoBehaviour
     public void playGameBGM()
     {
         PlayBGM(GameBGM);
+    }
+
+    public void playGameOverSFX()
+    {
+        SFX.PlayOneShot(GameOverSFX);
+    }
+
+    public void playGameWinSFX()
+    {
+        SFX.PlayOneShot(GameWinSFX);
     }
 
     public void playClickSFX()

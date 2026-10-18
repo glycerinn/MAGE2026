@@ -21,7 +21,7 @@ MonoBehaviour:
       value: Clear
     - source: Humidity
       value: 50%
-    - source: 'Rainfall '
+    - source: Rainfall
       value: 50 mm
   - diagnosis: Rainy
     conditions:

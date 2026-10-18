@@ -353,6 +353,7 @@ public class StageManager : MonoBehaviour
     
     void ShowCorrectResult()
     {
+        audioManager.playGameWinSFX();
         stageComplete = true;
 
         if (stageResultImage != null)
@@ -375,6 +376,7 @@ public class StageManager : MonoBehaviour
 
     void ShowIncorrectResult()
     {
+        audioManager.playGameOverSFX();
         stageComplete = false;
 
         if (stageResultImage != null)

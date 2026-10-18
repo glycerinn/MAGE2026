@@ -22,9 +22,11 @@ public class HeadlineClue : MonoBehaviour
     private Coroutine loadingCoroutine;
     private Vector3 sliderFillStartScale;
     private bool isLoading;
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         Instance = this;
 
         if (sliderFill != null)
@@ -140,6 +142,7 @@ public class HeadlineClue : MonoBehaviour
 
     private IEnumerator LoadClue()
     {
+        audioManager.playFix2SFX();
         float elapsed = 0f;
         float duration = Mathf.Max(loadingDuration, 0.01f);
 

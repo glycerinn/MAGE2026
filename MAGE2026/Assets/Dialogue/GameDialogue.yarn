@@ -97,5 +97,6 @@ Intern: The rainfall gauge is the rightmost top screen.
 ===
 title: Stage5
 ---
-This is an example of a Yarn Spinner script. Write your dialogue here!!!!
+<<show_character "Intern">>
+Intern: I could’ve slept a little longer, but here I am
 ===
