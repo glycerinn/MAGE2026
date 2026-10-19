@@ -1,21 +1,57 @@
 using UnityEngine;
+using UnityEngine.UI; // Wajib ditambahkan untuk mengakses UI Image
 
 public class ObjectSlider : MonoBehaviour
 {
     [Header("Handle")]
     public Transform handle;
 
+    [Header("Water Fill (Metode Health Bar)")]
+    public Image waterFillImage; // Drag komponen Image objek "Fill" ke sini
+
     [Header("Slider Range")]
     public float bottomY = -2f;
     public float topY = 2f;
+    
+    [Header("Animation Settings")]
+    public float smoothSpeed = 5f;
 
     public int Value { get; private set; }
+    
+    // Target untuk posisi panah dan isi air
+    private float targetY;
+    private float targetFillAmount; 
 
     private SliderMinigame minigame;
 
     void Awake()
     {
         minigame = GetComponentInParent<SliderMinigame>();
+        
+        // Inisialisasi awal agar tidak lompat
+        targetY = handle.localPosition.y;
+        if (waterFillImage != null)
+        {
+            targetFillAmount = waterFillImage.fillAmount;
+        }
+    }
+
+    void Update()
+    {
+        // 1. Animasi untuk Handle (Panah)
+        if (handle != null)
+        {
+            Vector3 currentPos = handle.localPosition;
+            currentPos.y = Mathf.Lerp(currentPos.y, targetY, Time.deltaTime * smoothSpeed);
+            handle.localPosition = currentPos;
+        }
+
+        // 2. Animasi untuk Water Fill dengan Fill Amount (Gaya Health Bar)
+        if (waterFillImage != null)
+        {
+            // Nilai fillAmount berkisar dari 0.0 (kosong) hingga 1.0 (penuh)
+            waterFillImage.fillAmount = Mathf.Lerp(waterFillImage.fillAmount, targetFillAmount, Time.deltaTime * smoothSpeed);
+        }
     }
 
     public void SetValue(int value)
@@ -23,11 +59,14 @@ public class ObjectSlider : MonoBehaviour
         Value = Mathf.Clamp(value, 0, 100);
 
         float normalized = Value / 100f;
-        float y = Mathf.Lerp(bottomY, topY, normalized);
+        
+        targetY = Mathf.Lerp(bottomY, topY, normalized);
 
-        Vector3 position = handle.localPosition;
-        position.y = y;
-        handle.localPosition = position;
+        // Menentukan target pengisian untuk Image
+        if (waterFillImage != null)
+        {
+             targetFillAmount = normalized;
+        }
     }
 
     public void Select()
