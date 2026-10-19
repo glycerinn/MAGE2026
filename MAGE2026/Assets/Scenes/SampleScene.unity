@@ -19820,6 +19820,9 @@ MonoBehaviour:
   allowedValues: 230000003200000055000000
   loadingDuration: 3
   cluePopup: {fileID: 1398916155}
+  successSound: {fileID: 8300000, guid: 12eccd3d34863f34a83e796cc61e52d7, type: 3}
+  failSound: {fileID: 8300000, guid: ce1a2c7dcb600d44e8375d1bdc8bd7f6, type: 3}
+  fixingSound: {fileID: 8300000, guid: adf1d2ac2ab362545a7aaf708af7cae9, type: 3}
 --- !u!1 &1739118332
 GameObject:
   m_ObjectHideFlags: 0

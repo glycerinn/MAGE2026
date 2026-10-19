@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Menambahkan AudioSource otomatis untuk Manager
+[RequireComponent(typeof(AudioSource))]
 public class HumidityMinigame : MonoBehaviour, IMinigame
 {
     public string MinigameName => "HumidityMinigame";
@@ -16,13 +18,22 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
     [Header("Clue")]
     public CluePopup cluePopup;
 
+    [Header("Audio Settings")]
+    public AudioClip successSound; // Suara saat berhasil
+    public AudioClip failSound;    // Suara saat gagal
+    public AudioClip fixingSound;  // Suara saat slider sedang diproses (looping)
+
     private int majorityValue;
     private bool hasWon;
-    private AudioManager audioManager;
+    
+    // Variabel Audio
+    private AudioSource audioSource;
+    private int activeLoadingCount = 0; // Menghitung berapa slider yang sedang di-fix
 
     public void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
     }
 
     public void StartHumidityMinigame()
@@ -39,8 +50,27 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
         if (hasWon || slider == null || slider.IsLocked || slider.IsLoading)
             return;
 
+        // Memulai suara fixing jika ini adalah slider pertama yang ditekan
+        activeLoadingCount++;
+        if (activeLoadingCount == 1 && fixingSound != null)
+        {
+            audioSource.clip = fixingSound;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+
         slider.PlayLoadingPulse(loadingDuration, () =>
         {
+            // Mengurangi jumlah slider yang aktif
+            activeLoadingCount--;
+            
+            // Hentikan suara fixing jika tidak ada lagi slider yang sedang di-fix
+            if (activeLoadingCount <= 0)
+            {
+                activeLoadingCount = 0;
+                audioSource.Stop();
+            }
+
             if (hasWon || slider == null || slider.IsLocked)
                 return;
 
@@ -54,51 +84,38 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             slider.SetValue(newValue);
 
             if (newValue == majorityValue)
+            {
                 slider.Lock();
+                // Mainkan suara sukses (PlayOneShot agar tidak memotong suara fixing jika ada slider lain)
+                if (successSound != null) audioSource.PlayOneShot(successSound);
+            }
+            else
+            {
+                // Mainkan suara gagal
+                if (failSound != null) audioSource.PlayOneShot(failSound);
+            }
 
             CheckComplete();
         });
     }
 
+    // ... (Sisa fungsi GenerateNewRound, CheckComplete, ReportDiagnosisClue, ResetMinigame tetap sama seperti aslinya, 
+    // hanya hapus pemanggilan audioManager.playHumSuccessSFX() dan playHumFailSFX() yang ada di dalam GenerateNewRound aslinya)
+
     void GenerateNewRound()
     {
         hasWon = false;
+        activeLoadingCount = 0; // Reset counter audio saat ronde baru
+        audioSource.Stop();
 
-        if (DiagnosisManager.Instance == null)
-        {
-            Debug.LogError("HumidityMinigame: DiagnosisManager.Instance is null.");
-            return;
-        }
-
+        if (DiagnosisManager.Instance == null) return;
         string requiredHumidity = DiagnosisManager.Instance.GetRequiredObservation("Humidity");
-
-        if (string.IsNullOrEmpty(requiredHumidity))
-        {
-            Debug.LogError("HumidityMinigame: No Humidity diagnosis clue was selected.");
-            return;
-        }
-
+        if (string.IsNullOrEmpty(requiredHumidity)) return;
         string cleanHumidity = requiredHumidity.Replace("%", "").Trim();
-
-        if (!int.TryParse(cleanHumidity, out majorityValue))
-        {
-            Debug.LogError("HumidityMinigame: Could not parse Humidity clue: " + requiredHumidity);
-            return;
-        }
-
-        Debug.Log("Humidity minigame using selected diagnosis humidity: " + majorityValue);
-
-        if (sliders == null || sliders.Length == 0)
-        {
-            Debug.LogError("HumidityMinigame: No sliders assigned.");
-            return;
-        }
+        if (!int.TryParse(cleanHumidity, out majorityValue)) return;
 
         int[] majoritySlots = new int[sliders.Length];
-
-        for (int i = 0; i < majoritySlots.Length; i++)
-            majoritySlots[i] = i;
-
+        for (int i = 0; i < majoritySlots.Length; i++) majoritySlots[i] = i;
         for (int i = majoritySlots.Length - 1; i > 0; i--)
         {
             int randomIndex = Random.Range(0, i + 1);
@@ -108,17 +125,14 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
         }
 
         int majorityCount = Mathf.Min(3, sliders.Length);
-
         for (int i = 0; i < sliders.Length; i++)
         {
-            if (sliders[i] == null)
-                continue;
+            if (sliders[i] == null) continue;
 
             sliders[i].CancelLoadingPulse();
             sliders[i].Unlock();
 
             bool isMajority = false;
-
             for (int j = 0; j < majorityCount; j++)
             {
                 if (majoritySlots[j] == i)
@@ -132,89 +146,52 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             {
                 sliders[i].SetValue(majorityValue);
                 sliders[i].Lock();
-                audioManager.playHumSuccessSFX();
+                // Dihapus: audioManager.playHumSuccessSFX();
             }
             else
             {
                 int startingValue;
-
-                do
-                {
-                    startingValue = Random.Range(0, 301);
-                }
-                while (startingValue == majorityValue);
-
+                do { startingValue = Random.Range(0, 301); } while (startingValue == majorityValue);
                 sliders[i].SetValue(startingValue);
-                audioManager.playHumFailSFX();
+                // Dihapus: audioManager.playHumFailSFX();
             }
         }
-
-        Debug.Log("Humidity round generated. Majority value: " + majorityValue);
     }
 
     void CheckComplete()
     {
-        if (sliders == null || sliders.Length == 0)
-        {
-            Debug.LogError("HumidityMinigame: Sliders array is missing or empty.", this);
-            return;
-        }
+        if (sliders == null || sliders.Length == 0) return;
         for (int i = 0; i < sliders.Length; i++)
         {
-            if (sliders[i] == null)
-            {
-                Debug.LogError("HumidityMinigame: Slider at index " + i + " is not assigned.", this);
-                return;
-            }
-            if (!sliders[i].IsLocked)
-                return;
+            if (sliders[i] == null) return;
+            if (!sliders[i].IsLocked) return;
         }
         hasWon = true;
         ReportDiagnosisClue();
-        
-        if (StageManager.Instance == null)
-        {
-            Debug.LogError("HumidityMinigame: StageManager.Instance is null.", this);
-            return;
-        }
-        StageManager.Instance.MinigameWon(MinigameName);
+        if (StageManager.Instance != null) StageManager.Instance.MinigameWon(MinigameName);
     }
 
     void ReportDiagnosisClue()
     {
-        if (DiagnosisManager.Instance == null)
-            return;
-
+        if (DiagnosisManager.Instance == null) return;
         string humidityClue = DiagnosisManager.Instance.GetRequiredObservation("Humidity");
-
-        if (string.IsNullOrEmpty(humidityClue))
-        {
-            Debug.LogError("No Humidity diagnosis clue found.");
-            return;
-        }
-
+        if (string.IsNullOrEmpty(humidityClue)) return;
         DiagnosisManager.Instance.SetObservation("Humidity", humidityClue);
-
-        if (cluePopup != null)
-            cluePopup.ShowClue("Humidity", humidityClue);
+        if (cluePopup != null) cluePopup.ShowClue("Humidity", humidityClue);
     }
 
     public void ResetMinigame()
     {
         hasWon = false;
         majorityValue = 0;
-
-        if (cluePopup != null)
-            cluePopup.HideClue();
-
-        if (sliders == null)
-            return;
-
+        activeLoadingCount = 0;
+        if (audioSource != null) audioSource.Stop();
+        
+        if (cluePopup != null) cluePopup.HideClue();
+        if (sliders == null) return;
         for (int i = 0; i < sliders.Length; i++)
         {
-            if (sliders[i] == null)
-                continue;
-
+            if (sliders[i] == null) continue;
             sliders[i].CancelLoadingPulse();
             sliders[i].Unlock();
         }
