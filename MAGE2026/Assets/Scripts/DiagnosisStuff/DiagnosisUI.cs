@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class DiagnosisUI : MonoBehaviour
 {
@@ -6,6 +7,9 @@ public class DiagnosisUI : MonoBehaviour
 
     [Header("Diagnosis Choices")]
     public DiagnosisChoice[] choices;
+
+    [Header("Selected Diagnosis Display")]
+    public TMP_Text selectedDiagnosisText;
 
     [Header("Choices Per Stage")]
     public int[] choicesPerStage =
@@ -29,6 +33,10 @@ public class DiagnosisUI : MonoBehaviour
     public void SetupForStage(int stage)
     {
         selectedChoice = null;
+
+        if (selectedDiagnosisText != null)
+            selectedDiagnosisText.text = "Selected: None";
+
         ready = false;
 
         Debug.Log(
@@ -95,6 +103,9 @@ public class DiagnosisUI : MonoBehaviour
             return;
 
         selectedChoice = choice;
+
+        if (selectedDiagnosisText != null)
+            selectedDiagnosisText.text = "Selected:\n" + selectedChoice.diagnosis;
 
         for (int i = 0; i < choices.Length; i++)
         {
@@ -178,6 +189,10 @@ public class DiagnosisUI : MonoBehaviour
     public void ResetUI()
     {
         selectedChoice = null;
+
+        if (selectedDiagnosisText != null)
+            selectedDiagnosisText.text = "Selected: None";
+
         ready = false;
 
         for (int i = 0;
