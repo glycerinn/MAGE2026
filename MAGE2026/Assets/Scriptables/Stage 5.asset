@@ -24,7 +24,7 @@ MonoBehaviour:
     - source: Rainfall
       value: 50 mm
     - source: Headline
-      value: Merch sale
+      value: None
   - diagnosis: Rainy
     conditions:
     - source: Cloud
@@ -36,7 +36,7 @@ MonoBehaviour:
     - source: Rainfall
       value: 50 mm
     - source: Headline
-      value: Anime con
+      value: None
   - diagnosis: Thunderstorm
     conditions:
     - source: Cloud
@@ -48,7 +48,7 @@ MonoBehaviour:
     - source: Rainfall
       value: 50 mm
     - source: Headline
-      value: Lightning strike
+      value: None
   - diagnosis: Flood
     conditions:
     - source: Cloud
@@ -60,7 +60,7 @@ MonoBehaviour:
     - source: Rainfall
       value: 100 mm
     - source: Headline
-      value: River overflow
+      value: River overflow detected
   - diagnosis: Landslide
     conditions:
     - source: Cloud
@@ -72,7 +72,7 @@ MonoBehaviour:
     - source: Rainfall
       value: 100 mm
     - source: Headline
-      value: Slope move
+      value: Slope movement detected
   - diagnosis: Drought
     conditions:
     - source: Cloud
@@ -84,4 +84,4 @@ MonoBehaviour:
     - source: Rainfall
       value: 0 mm
     - source: Headline
-      value: No rain
+      value: Possibility of No Rainfall for 7 days
