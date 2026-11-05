@@ -32,11 +32,8 @@ public class HumiditySlider : MonoBehaviour
     private Tween delayTween;
     private HumidityMinigame minigame;
 
-    // HAPUS: private AudioManager audioManager;
-
     void Awake()
     {
-        // HAPUS: audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         minigame = GetComponentInParent<HumidityMinigame>();
         if (fill != null)
         {
@@ -46,7 +43,6 @@ public class HumiditySlider : MonoBehaviour
         }
     }
 
-    // ... (Fungsi SetValue, Lock, Unlock tetap sama persis) ...
 
     public void SetValue(int value)
     {
@@ -84,7 +80,6 @@ public class HumiditySlider : MonoBehaviour
 
     public void PlayLoadingPulse(float duration, Action onComplete)
     {
-        // HAPUS: audioManager.playFix2SFX();
         
         if (IsLoading || fill == null)
             return;
@@ -116,8 +111,6 @@ public class HumiditySlider : MonoBehaviour
             onComplete?.Invoke();
         });
     }
-
-    // ... (Fungsi CancelLoadingPulse, ButtonPressed, dll. tetap sama persis) ...
 
     public void CancelLoadingPulse()
     {

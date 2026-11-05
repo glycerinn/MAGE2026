@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Menambahkan AudioSource otomatis untuk Manager
 [RequireComponent(typeof(AudioSource))]
 public class HumidityMinigame : MonoBehaviour, IMinigame
 {
@@ -19,16 +18,15 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
     public CluePopup cluePopup;
 
     [Header("Audio Settings")]
-    public AudioClip successSound; // Suara saat berhasil
-    public AudioClip failSound;    // Suara saat gagal
-    public AudioClip fixingSound;  // Suara saat slider sedang diproses (looping)
+    public AudioClip successSound; 
+    public AudioClip failSound;    
+    public AudioClip fixingSound; 
 
     private int majorityValue;
     private bool hasWon;
     
-    // Variabel Audio
     private AudioSource audioSource;
-    private int activeLoadingCount = 0; // Menghitung berapa slider yang sedang di-fix
+    private int activeLoadingCount = 0; 
 
     public void Awake()
     {
@@ -50,7 +48,6 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
         if (hasWon || slider == null || slider.IsLocked || slider.IsLoading)
             return;
 
-        // Memulai suara fixing jika ini adalah slider pertama yang ditekan
         activeLoadingCount++;
         if (activeLoadingCount == 1 && fixingSound != null)
         {
@@ -61,10 +58,8 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
 
         slider.PlayLoadingPulse(loadingDuration, () =>
         {
-            // Mengurangi jumlah slider yang aktif
             activeLoadingCount--;
             
-            // Hentikan suara fixing jika tidak ada lagi slider yang sedang di-fix
             if (activeLoadingCount <= 0)
             {
                 activeLoadingCount = 0;
@@ -86,12 +81,10 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             if (newValue == majorityValue)
             {
                 slider.Lock();
-                // Mainkan suara sukses (PlayOneShot agar tidak memotong suara fixing jika ada slider lain)
                 if (successSound != null) audioSource.PlayOneShot(successSound);
             }
             else
             {
-                // Mainkan suara gagal
                 if (failSound != null) audioSource.PlayOneShot(failSound);
             }
 
@@ -99,13 +92,11 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
         });
     }
 
-    // ... (Sisa fungsi GenerateNewRound, CheckComplete, ReportDiagnosisClue, ResetMinigame tetap sama seperti aslinya, 
-    // hanya hapus pemanggilan audioManager.playHumSuccessSFX() dan playHumFailSFX() yang ada di dalam GenerateNewRound aslinya)
 
     void GenerateNewRound()
     {
         hasWon = false;
-        activeLoadingCount = 0; // Reset counter audio saat ronde baru
+        activeLoadingCount = 0;
         audioSource.Stop();
 
         if (DiagnosisManager.Instance == null) return;
@@ -146,14 +137,12 @@ public class HumidityMinigame : MonoBehaviour, IMinigame
             {
                 sliders[i].SetValue(majorityValue);
                 sliders[i].Lock();
-                // Dihapus: audioManager.playHumSuccessSFX();
             }
             else
             {
                 int startingValue;
                 do { startingValue = Random.Range(0, 301); } while (startingValue == majorityValue);
                 sliders[i].SetValue(startingValue);
-                // Dihapus: audioManager.playHumFailSFX();
             }
         }
     }

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Wajib ditambahkan untuk mengakses UI Image
+using UnityEngine.UI; 
 
 public class ObjectSlider : MonoBehaviour
 {
@@ -7,7 +7,7 @@ public class ObjectSlider : MonoBehaviour
     public Transform handle;
 
     [Header("Water Fill (Metode Health Bar)")]
-    public Image waterFillImage; // Drag komponen Image objek "Fill" ke sini
+    public Image waterFillImage; 
 
     [Header("Slider Range")]
     public float bottomY = -2f;
@@ -18,7 +18,6 @@ public class ObjectSlider : MonoBehaviour
 
     public int Value { get; private set; }
     
-    // Target untuk posisi panah dan isi air
     private float targetY;
     private float targetFillAmount; 
 
@@ -28,7 +27,6 @@ public class ObjectSlider : MonoBehaviour
     {
         minigame = GetComponentInParent<SliderMinigame>();
         
-        // Inisialisasi awal agar tidak lompat
         targetY = handle.localPosition.y;
         if (waterFillImage != null)
         {
@@ -38,7 +36,6 @@ public class ObjectSlider : MonoBehaviour
 
     void Update()
     {
-        // 1. Animasi untuk Handle (Panah)
         if (handle != null)
         {
             Vector3 currentPos = handle.localPosition;
@@ -46,10 +43,8 @@ public class ObjectSlider : MonoBehaviour
             handle.localPosition = currentPos;
         }
 
-        // 2. Animasi untuk Water Fill dengan Fill Amount (Gaya Health Bar)
         if (waterFillImage != null)
         {
-            // Nilai fillAmount berkisar dari 0.0 (kosong) hingga 1.0 (penuh)
             waterFillImage.fillAmount = Mathf.Lerp(waterFillImage.fillAmount, targetFillAmount, Time.deltaTime * smoothSpeed);
         }
     }
@@ -62,7 +57,6 @@ public class ObjectSlider : MonoBehaviour
         
         targetY = Mathf.Lerp(bottomY, topY, normalized);
 
-        // Menentukan target pengisian untuk Image
         if (waterFillImage != null)
         {
              targetFillAmount = normalized;

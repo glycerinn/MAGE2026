@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-// Menambahkan AudioSource secara otomatis ke objek ini
 [RequireComponent(typeof(AudioSource))]
 public class HeadlineClue : MonoBehaviour
 {
@@ -21,17 +20,16 @@ public class HeadlineClue : MonoBehaviour
     public float loadingDuration = 3f;
 
     [Header("Audio Settings")]
-    public AudioClip loadingSound; // Anda bebas memasukkan suara apapun di Inspector
+    public AudioClip loadingSound; 
 
     private string headlineValue;
     private Coroutine loadingCoroutine;
     private Vector3 sliderFillStartScale;
     private bool isLoading;
-    private AudioSource audioSource; // Menggantikan AudioManager
+    private AudioSource audioSource;
 
     void Awake()
     {
-        // Mengambil referensi AudioSource dari objek ini
         audioSource = GetComponent<AudioSource>();
         Instance = this;
 
@@ -148,7 +146,6 @@ public class HeadlineClue : MonoBehaviour
 
     private IEnumerator LoadClue()
     {
-        // Memainkan suara secara independen menggunakan AudioSource internal
         if (loadingSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(loadingSound);

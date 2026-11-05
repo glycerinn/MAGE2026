@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-// Memastikan objek memiliki AudioSource
 [RequireComponent(typeof(AudioSource))]
 public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
@@ -21,7 +20,6 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Awake()
     {
         originalScale = transform.localScale;
-        // Mengambil referensi AudioSource saat objek dibuat
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -30,7 +28,6 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         scaleTween?.Kill();
         scaleTween = transform.DOScale(originalScale * hoverScaleMultiplier, hoverScaleDuration).SetEase(Ease.OutQuad);
         
-        // Memainkan suara hover
         if (hoverSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hoverSound);
@@ -45,7 +42,6 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Memainkan suara klik
         if (clickSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(clickSound);

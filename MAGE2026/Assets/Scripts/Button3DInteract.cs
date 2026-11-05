@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Baris ini memastikan Unity otomatis menambahkan komponen AudioSource ke objek Anda
 [RequireComponent(typeof(AudioSource))]
 public class Button3DInteract : MonoBehaviour
 {
@@ -22,13 +21,11 @@ public class Button3DInteract : MonoBehaviour
         originalScale = transform.localScale;
         targetScale = originalScale;
 
-        // Mengambil referensi AudioSource
         audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        // Transisi halus menggunakan Lerp
         transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * smoothSpeed);
     }
 
@@ -36,7 +33,6 @@ public class Button3DInteract : MonoBehaviour
     {
         targetScale = originalScale * hoverScaleMultiplier;
         
-        // Memainkan suara saat di-hover
         if (hoverSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hoverSound);
@@ -52,7 +48,6 @@ public class Button3DInteract : MonoBehaviour
     {
         targetScale = originalScale * clickScaleMultiplier;
         
-        // Memainkan suara saat diklik
         if (clickSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(clickSound);

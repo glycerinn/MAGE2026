@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Memastikan objek memiliki AudioSource
 [RequireComponent(typeof(AudioSource))]
 public class SatelliteMinigame : MonoBehaviour, IMinigame
 {
@@ -34,8 +33,8 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
     public int winAmount = 5;
 
     [Header("Audio Settings")]
-    public AudioClip engineSound; // Suara saat satelit bergerak
-    public AudioClip fixSound;    // Suara saat satelit sejajar (berhasil di-lock)
+    public AudioClip engineSound; 
+    public AudioClip fixSound;    
 
     private float lineAngle;
     private float targetAngle;
@@ -43,15 +42,12 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
     private float alignmentTimer;
     private bool hasWon;
     
-    // Variabel Audio
     private AudioSource audioSource;
     private bool isFixSFXPlaying;
 
     public void Awake()
     {
-        // Mengambil referensi AudioSource
         audioSource = GetComponent<AudioSource>();
-        // Memastikan audio tidak otomatis dimainkan dan bisa di-loop jika perlu
         audioSource.playOnAwake = false; 
     }
 
@@ -79,7 +75,6 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
         if (Input.GetKey(rotateRight))
             direction -= 1f;
 
-        // Jika ada input pergerakan
         if (direction != 0f)
         {
             lineAngle += direction * rotationSpeed * Time.deltaTime;
@@ -92,21 +87,18 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
             linePivot.localRotation = Quaternion.Euler(0f, 0f, lineAngle);
 
-            // Handle suara mesin
             if (engineSound != null && !isFixSFXPlaying) 
             {
-                // Jika audioSource tidak sedang memainkan suara mesin, mainkan
                 if (audioSource.clip != engineSound || !audioSource.isPlaying)
                 {
                     audioSource.clip = engineSound;
-                    audioSource.loop = true; // Loop suara mesin selama bergerak
+                    audioSource.loop = true; 
                     audioSource.Play();
                 }
             }
         }
         else
         {
-            // Jika tidak ada input dan suara yang sedang diputar adalah suara mesin, hentikan
             if (audioSource.clip == engineSound && audioSource.isPlaying && !isFixSFXPlaying)
             {
                 audioSource.Stop();
@@ -126,10 +118,9 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
             if (!isFixSFXPlaying)
             {
-                // Saat mulai sejajar, hentikan suara mesin dan mainkan suara "Fix"
                 audioSource.Stop(); 
                 audioSource.clip = fixSound;
-                audioSource.loop = true; // Loop suara fix selama ditahan
+                audioSource.loop = true;
                 audioSource.Play();
                 
                 isFixSFXPlaying = true;
@@ -148,7 +139,6 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
 
             if (isFixSFXPlaying)
             {
-                // Jika keluar dari area sejajar, hentikan suara "Fix"
                 audioSource.Stop();
                 isFixSFXPlaying = false;
             }
@@ -235,13 +225,10 @@ public class SatelliteMinigame : MonoBehaviour, IMinigame
         if (cluePopup != null)
             cluePopup.HideClue();
 
-        linePivot.localRotation =
-            Quaternion.identity;
+        linePivot.localRotation = Quaternion.identity;
 
-        targetPivot.localRotation =
-            Quaternion.identity;
+        targetPivot.localRotation = Quaternion.identity;
 
-        // Pastikan suara berhenti saat minigame di-reset
         if (audioSource != null)
         {
              audioSource.Stop();
